@@ -24,7 +24,7 @@ export async function getPlaylistInfo(
       }
 
       const res = await fetch(url.toString());
-      const data: youtube_v3.Schema$PlaylistItemListResponse = await res.json();
+      const data: youtube_v3.Schema$PlaylistItemListResponse = await res.json();      
 
       if (data.items) {
         allItems.push(...data.items);
