@@ -7,6 +7,36 @@ generator client {
   provider = "prisma-client-js"
 }
 
+enum CourseType {
+  playlist
+  video
+}
+
+// course schema
+model Course {
+  id String @id @default(cuid())
+  title String
+  thumbnailUrl String
+  type CourseType
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  userId String
+  videos CourseVideo[]
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model CourseVideo {
+  id String @id @default(cuid())
+  title String
+  videoUrl String
+  duration Int
+  isWatched Boolean @default(false)
+  courseId String
+  course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+}
+
+// nextjs auth schemas
+
 model Account {
   id                 String  @id @default(cuid())
   userId             String  @map("user_id")
@@ -45,6 +75,7 @@ model User {
   image         String?
   accounts      Account[]
   sessions      Session[]
+  courses       Course[]
  
   @@map("users")
 }
