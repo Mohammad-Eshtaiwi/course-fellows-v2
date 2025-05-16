@@ -1,7 +1,8 @@
-import NextAuth, { NextAuthOptions } from "next-auth";
+import NextAuth, { getServerSession, NextAuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { prisma } from "@/lib/prisma";
+import { GetServerSidePropsContext, NextApiRequest, NextApiResponse } from "next";
 
 export const authOptions: NextAuthOptions = {
     adapter: PrismaAdapter(prisma),
@@ -33,6 +34,18 @@ export const authOptions: NextAuthOptions = {
     },
 };
 
+
 const handler = NextAuth(authOptions);
+
+
+// Use it in server contexts
+export function auth(
+    ...args:
+      | [GetServerSidePropsContext["req"], GetServerSidePropsContext["res"]]
+      | [NextApiRequest, NextApiResponse]
+      | []
+  ) {
+    return getServerSession(...args, authOptions)
+  }
 
 export { handler as GET, handler as POST }; 

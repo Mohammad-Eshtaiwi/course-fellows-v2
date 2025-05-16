@@ -15,13 +15,15 @@
     "db:studio": "prisma studio",
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate dev",
-    "prisma:studio": "prisma studio"
+    "prisma:studio": "prisma studio",
+    "reset": "prisma migrate reset"
   },
   "dependencies": {
     "@auth/core": "^0.34.2",
     "@auth/prisma-adapter": "^2.9.1",
     "@googleapis/youtube": "^25.0.0",
     "@prisma/client": "^6.7.0",
+    "iso8601-duration": "^2.1.2",
     "next": "15.3.2",
     "next-auth": "^4.24.11",
     "react": "^19.0.0",

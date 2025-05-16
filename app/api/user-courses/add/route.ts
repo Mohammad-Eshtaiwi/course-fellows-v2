@@ -1,13 +1,24 @@
-import { getPlaylistInfo, getVideoInfo } from "@/app/api/lib/youtube/client";
-import { buildErrorResponse, buildSuccessResponse } from "@/app/api/utils/responseBuilder";
+import {
+  buildErrorResponse,
+  buildSuccessResponse,
+} from "@/app/api/utils/responseBuilder";
+import { auth } from "@/app/api/auth/[...nextauth]/route";
+import { CourseBuilder } from "../../lib/youtube/course-builder";
+import { prisma } from "@/lib/prisma";
 
 export async function GET(request: Request) {
+  const user = await auth();
+
+  if (!user) {
+    return buildErrorResponse(401);
+  }
+
   const { searchParams } = new URL(request.url);
   const url = searchParams.get("url");
   const typeParam = searchParams.get("type");
-  const type = typeParam === "playlist" || typeParam === "video" ? typeParam : null;
-  console.log(url, type);
-  
+  const type =
+    typeParam === "playlist" || typeParam === "video" ? typeParam : null;
+
   if (!type) {
     return buildErrorResponse(400, "type must be either 'playlist' or 'video'");
   }
@@ -32,12 +43,33 @@ export async function GET(request: Request) {
   } else if (type === "video") {
     id = videoId!;
   }
+  try {
+    if (type === "playlist") {
+      const courseBuilder = new CourseBuilder(user.user.id);
+      const { course, videos } = await courseBuilder.buildFromPlaylist(id!);
+      const result = await prisma.$transaction(async (tx) => {
+      const createdCourse = await tx.course.create({
+        data: {
+          ...course,
+          userId: user.user.id,
+        },
+      });
+      
+      const courseVideos = await tx.courseVideo.createMany({
+        data: videos.map((video) => ({
+          ...video,
+          courseId: createdCourse.id,
+        })),
+      });
 
-  if (type === "playlist") {
-    const res = await getPlaylistInfo(id!);
-    return buildSuccessResponse(res, 200);
+      return createdCourse.id;
+    });
+    return buildSuccessResponse({ newCourseId: result }, 200);
   } else if (type === "video") {
-    const res = await getVideoInfo(id!);
-    return buildSuccessResponse(res, 200);
+      return buildSuccessResponse({ course: {}, videos: [] }, 200);
+    }
+  } catch (error) {
+    console.error(error);
+    return buildErrorResponse(500, "Internal server error");
   }
 }
