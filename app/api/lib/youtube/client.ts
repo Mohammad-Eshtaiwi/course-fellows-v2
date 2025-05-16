@@ -12,6 +12,10 @@ export async function getPlaylistInfo(
   const allItems: youtube_v3.Schema$PlaylistItem[] = [];
   let nextPageToken: string | undefined = undefined;
 
+  if (!process.env.YOUTUBE_API_KEY) {
+    throw new Error("YOUTUBE_API_KEY is not set");
+  }
+
   try {
     do {
       const url = new URL(YOUTUBE_API_BASE + "/playlistItems");
@@ -45,6 +49,10 @@ type VideoInfoResult = {
 };
 
 export async function getVideoInfo(videoId: string): Promise<VideoInfoResult> {
+  if (!process.env.YOUTUBE_API_KEY) {
+    throw new Error("YOUTUBE_API_KEY is not set");
+  }
+
   try {
     const url = new URL(YOUTUBE_API_BASE + "/videos");
     url.searchParams.append("part", "snippet,contentDetails,statistics");
