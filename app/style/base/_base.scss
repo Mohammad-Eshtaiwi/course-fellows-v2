@@ -1,0 +1,13 @@
+// Base element styles
+body {
+  font-size: clamp(14px, 1rem + 0.5vw, 20px);
+  line-height: var(--line-height-base);
+  color: var(--color-white-100);
+  background-color: var(--color-dark-900);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  min-height: 100vh;
+  overflow-x: hidden;
+  text-rendering: optimizeLegibility;
+  -webkit-text-size-adjust: 100%;
+}

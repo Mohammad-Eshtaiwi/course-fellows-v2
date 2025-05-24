@@ -1,0 +1,94 @@
+// Font families
+body {
+  font-size: $font-size-base;
+  line-height: $line-height-base;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+// Headings
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: var(--spacing-md);
+}
+
+h1 {
+  font-size: clamp(2rem, 5vw, 3.5rem);
+}
+
+h2 {
+  font-size: clamp(1.5rem, 4vw, 2.5rem);
+}
+
+h3 {
+  font-size: clamp(1.25rem, 3vw, 2rem);
+}
+
+h4 {
+  font-size: clamp(1.125rem, 2vw, 1.5rem);
+}
+
+h5 {
+  font-size: clamp(1rem, 1.5vw, 1.25rem);
+}
+
+h6 {
+  font-size: clamp(0.875rem, 1vw, 1rem);
+}
+
+// Paragraphs
+p {
+  margin-bottom: var(--spacing-md);
+}
+
+// Links
+a {
+  text-decoration: none;
+  transition: color 0.3s ease;
+
+  &:hover {
+    opacity: 0.8;
+  }
+}
+
+// Lists
+ul, ol {
+  margin-bottom: var(--spacing-md);
+  padding-left: var(--spacing-lg);
+}
+
+// Blockquotes
+blockquote {
+  font-style: italic;
+  border-left: 4px solid;
+  padding-left: var(--spacing-md);
+  margin: var(--spacing-md) 0;
+}
+
+// Code
+code {
+  font-family: 'Courier New', Courier, monospace;
+  padding: 0.2em 0.4em;
+  border-radius: 3px;
+}
+
+// Small text
+small {
+  font-size: 0.875em;
+}
+
+// Text utilities
+.text-center { text-align: center; }
+.text-left { text-align: left; }
+.text-right { text-align: right; }
+.text-uppercase { text-transform: uppercase; }
+.text-lowercase { text-transform: lowercase; }
+.text-capitalize { text-transform: capitalize; }
+.text-bold { font-weight: 700; }
+.text-italic { font-style: italic; }
+.text-truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+} 

@@ -1,0 +1,42 @@
+.button {
+  border: none;
+  border-radius: 24px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.2s ease-in-out;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Variants */
+.primary {
+  background-color: var(--color-primary);
+  color: var(--color-white-100);
+}
+
+.primary:hover:not(:disabled) {
+  background-color: var(--color-primary-light);
+}
+
+/* Sizes */
+.small {
+  padding: 0.5em 1em;
+  font-size: 0.875rem;
+}
+
+.medium {
+  padding: 0.75em 1.5em;
+  font-size: 1rem;
+}
+
+.large {
+  padding: 1em 2em;
+  font-size: 1.125rem;
+}

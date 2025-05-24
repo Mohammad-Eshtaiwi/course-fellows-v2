@@ -1,0 +1,45 @@
+:root {
+  // Colors
+  --color-primary: #635FC7;
+  --color-primary-light: #A8A4FF;
+  --color-secondary: #6c757d;
+  --color-success: #28a745;
+  --color-danger: #dc3545;
+  --color-warning: #ffc107;
+  --color-info: #17a2b8;
+  --color-light: #f8f9fa;
+  --color-white-100: #FFFFFF;
+  --color-dark-900: #000112;
+  --color-dark-800: #2B2C37;
+  --color-dark-700: #1a1a1a;
+  --color-dark-600: #1e1e1e;
+  --color-grey: #828FA3;
+
+  // Spacing
+  --spacing-unit: 8px;
+  --spacing-xs: var(--spacing-unit);
+  --spacing-sm: calc(var(--spacing-unit) * 2);
+  --spacing-md: calc(var(--spacing-unit) * 3);
+  --spacing-lg: calc(var(--spacing-unit) * 4);
+  --spacing-xl: calc(var(--spacing-unit) * 5);
+}
+
+// Typography
+$font-size-base: 16px;
+$line-height-base: 1.5;
+
+// Breakpoints
+$breakpoint-sm: 576px;
+$breakpoint-md: 768px;
+$breakpoint-lg: 992px;
+$breakpoint-xl: 1200px;
+
+// Z-index
+$z-index-dropdown: 1000;
+$z-index-sticky: 1020;
+$z-index-fixed: 1030;
+$z-index-modal-backdrop: 1040;
+$z-index-modal: 1050;
+$z-index-popover: 1060;
+$z-index-tooltip: 1070;
+
