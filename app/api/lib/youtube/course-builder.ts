@@ -1,6 +1,7 @@
 import { Course, CourseVideo, CourseType } from "@prisma/client";
-import { getPlaylistInfo, getVideoInfo } from "./client";
+import { getPlaylistInfo, getVideoInfo } from "./youtube.client";
 import { toSeconds, parse } from "iso8601-duration";
+import { chaptersExtractor } from "./youtube.utils";
 
 type CourseBuilderResult = {
   course: Omit<Course, "id" | "createdAt" | "updatedAt">;
@@ -53,7 +54,11 @@ export class CourseBuilder {
     }
 
     const thumbnailUrl = video.snippet?.thumbnails?.high?.url || "";
-
+    const description = video.snippet?.description || "";
+    const chapters = chaptersExtractor(description);
+    if (chapters.length === 0) {
+      throw new Error("No chapters found");
+    }
     return {
       course: {
         title: video.snippet?.title!,
@@ -61,13 +66,11 @@ export class CourseBuilder {
         type: CourseType.video,
         userId: this.userId,
       },
-      videos: [
-        {
-          title: video.snippet?.title || "Untitled Video",
-          videoUrl: `https://www.youtube.com/watch?v=${videoId}`,
-          duration: 0, // You might want to parse this from contentDetails.duration
-        },
-      ],
+      videos: chapters.map((chapter) => ({
+        title: chapter.title,
+        videoUrl: `https://www.youtube.com/watch?v=${videoId}&t=${chapter.timestamp}`,
+        duration: chapter.duration,
+      })),
     };
   }
 }

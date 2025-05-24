@@ -6,70 +6,96 @@ import { auth } from "@/app/api/auth/[...nextauth]/route";
 import { CourseBuilder } from "../../lib/youtube/course-builder";
 import { prisma } from "@/lib/prisma";
 
-export async function GET(request: Request) {
-  const user = await auth();
+type CourseType = "playlist" | "video";
 
-  if (!user) {
-    return buildErrorResponse(401);
-  }
+interface UrlParams {
+  type: CourseType;
+  id: string;
+}
 
+function validateAndExtractParams(request: Request): UrlParams | null {
   const { searchParams } = new URL(request.url);
   const url = searchParams.get("url");
   const typeParam = searchParams.get("type");
-  const type =
-    typeParam === "playlist" || typeParam === "video" ? typeParam : null;
+  const type = typeParam === "playlist" || typeParam === "video" ? typeParam : null;
 
   if (!type) {
-    return buildErrorResponse(400, "type must be either 'playlist' or 'video'");
+    throw new Error("type must be either 'playlist' or 'video'");
   }
-
-  let id: string;
 
   if (!url) {
-    return buildErrorResponse(400, "url is required");
+    throw new Error("url is required");
   }
+
   const urlObj = new URL(url);
   const videoId = urlObj.searchParams.get("v");
   const playlistId = urlObj.searchParams.get("list");
 
   if (type === "playlist" && !playlistId) {
-    return buildErrorResponse(400, "playlistId is required");
+    throw new Error("playlistId is required");
   } else if (type === "video" && !videoId) {
-    return buildErrorResponse(400, "videoId is required");
+    throw new Error("videoId is required");
   }
 
-  if (type === "playlist") {
-    id = playlistId!;
-  } else if (type === "video") {
-    id = videoId!;
-  }
-  try {
-    if (type === "playlist") {
-      const courseBuilder = new CourseBuilder(user.user.id);
-      const { course, videos } = await courseBuilder.buildFromPlaylist(id!);
-      const result = await prisma.$transaction(async (tx) => {
-      const createdCourse = await tx.course.create({
-        data: {
-          ...course,
-          userId: user.user.id,
-        },
-      });
-      
-      const courseVideos = await tx.courseVideo.createMany({
-        data: videos.map((video) => ({
-          ...video,
-          courseId: createdCourse.id,
-        })),
-      });
+  return {
+    type,
+    id: type === "playlist" ? playlistId! : videoId!,
+  };
+}
 
-      return createdCourse.id;
+async function createCourseFromContent(
+  userId: string,
+  type: CourseType,
+  id: string
+): Promise<string> {
+  const courseBuilder = new CourseBuilder(userId);
+  const { course, videos } = type === "playlist"
+    ? await courseBuilder.buildFromPlaylist(id)
+    : await courseBuilder.buildFromVideo(id);
+
+  return await prisma.$transaction(async (tx) => {
+    const createdCourse = await tx.course.create({
+      data: {
+        ...course,
+        userId,
+      },
     });
-    return buildSuccessResponse({ newCourseId: result }, 200);
-  } else if (type === "video") {
-      return buildSuccessResponse({ course: {}, videos: [] }, 200);
+
+    await tx.courseVideo.createMany({
+      data: videos.map((video) => ({
+        ...video,
+        courseId: createdCourse.id,
+      })),
+    });
+
+    return createdCourse.id;
+  });
+}
+
+export async function GET(request: Request) {
+  try {
+    const user = await auth();
+    if (!user) {
+      return buildErrorResponse(401);
     }
+
+    const params = validateAndExtractParams(request);
+    if (!params) {
+      return buildErrorResponse(400, "Invalid parameters");
+    }
+
+    const newCourseId = await createCourseFromContent(
+      user.user.id,
+      params.type,
+      params.id
+    );
+
+    return buildSuccessResponse({ newCourseId }, 200);
   } catch (error) {
-    console.error(error);
-    return buildErrorResponse(500, "Internal server error");
+    const errorMessage = error instanceof Error ? error.message : "Internal server error";
+    if (errorMessage.includes("No chapters")) {
+      return buildErrorResponse(400, errorMessage);
+    }
+    return buildErrorResponse(500, errorMessage);
   }
 }
