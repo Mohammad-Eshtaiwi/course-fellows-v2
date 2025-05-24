@@ -1,3 +1,5 @@
+@use '../abstracts/variables' as *;
+
 // Font families
 body {
   font-size: $font-size-base;

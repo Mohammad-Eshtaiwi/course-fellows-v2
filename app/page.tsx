@@ -1,15 +1,15 @@
-import Button from "./components/Button";
+import SigninButton from "./components/SigninButton";
 import styles from "./page.module.scss";
-import { FaPaste, FaPlayCircle , FaTable } from "react-icons/fa";
+import { FaPaste, FaPlayCircle, FaTable } from "react-icons/fa";
 
-export default function Home() {
+export default async function Home() {
   const iconSize = 48;
   return (
     <section className={styles.page}>
       <div className={styles.hero}>
         <h1>Course Fellows</h1>
         <h5>Turn playlists into progress</h5>
-        <Button>Get Started</Button>
+        <SigninButton text="Get Started" />
       </div>
       <div className={styles.howItWorks}>
         <h2>How it Works</h2>

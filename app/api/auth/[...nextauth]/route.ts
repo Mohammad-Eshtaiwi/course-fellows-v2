@@ -12,13 +12,16 @@ export const authOptions: NextAuthOptions = {
             clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
         }),
     ],
+    session: {
+        strategy: "jwt",
+    },
     pages: {
         signIn: undefined,
     },
     callbacks: {
-        async session({ session, user }) {
+        async session({ session, token }) {
             if (session.user) {
-                session.user.id = user.id;
+                session.user.id = token.sub!;
             }
             return session;
         },
@@ -34,9 +37,7 @@ export const authOptions: NextAuthOptions = {
     },
 };
 
-
 const handler = NextAuth(authOptions);
-
 
 // Use it in server contexts
 export function auth(
