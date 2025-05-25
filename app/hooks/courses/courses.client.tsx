@@ -1,0 +1,19 @@
+import { getUserCourses } from "@/app/api/user-courses/getUserCourses";
+import { useQuery } from "@tanstack/react-query";
+
+const COURSES_ENDPOINT = "/api/user-courses";
+
+type Courses = Awaited<ReturnType<typeof getUserCourses>>;
+
+export function useCourses() {
+  return useQuery<Courses>({
+    queryKey: ["courses"],
+    queryFn: async () => {
+      const response = await fetch(COURSES_ENDPOINT);
+      if (!response.ok) {
+        throw new Error("Failed to fetch courses");
+      }
+      return response.json().then((data) => data.data);
+    },
+  });
+}

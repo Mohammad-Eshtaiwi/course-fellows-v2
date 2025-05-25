@@ -1,19 +1,14 @@
 :root {
   // Colors
-  --color-primary: #635FC7;
-  --color-primary-light: #A8A4FF;
-  --color-secondary: #6c757d;
-  --color-success: #28a745;
-  --color-danger: #dc3545;
-  --color-warning: #ffc107;
-  --color-info: #17a2b8;
-  --color-light: #f8f9fa;
-  --color-white-100: #FFFFFF;
+  --color-primary: #635fc7;
+  --color-primary-light: #a8a4ff;
+
+  --color-white-100: #ffffff;
   --color-dark-900: #000112;
-  --color-dark-800: #2B2C37;
+  --color-dark-800: #2b2c37;
   --color-dark-700: #1a1a1a;
   --color-dark-600: #1e1e1e;
-  --color-grey: #828FA3;
+  --color-grey: #828fa3;
 
   // Spacing
   --spacing-unit: 8px;
@@ -42,4 +37,3 @@ $z-index-modal-backdrop: 1040;
 $z-index-modal: 1050;
 $z-index-popover: 1060;
 $z-index-tooltip: 1070;
-

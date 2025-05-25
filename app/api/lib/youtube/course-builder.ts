@@ -33,7 +33,7 @@ export class CourseBuilder {
         type: CourseType.playlist,
         userId: this.userId,
       },
-      videos: playlistItems.map((item) => {
+      videos: playlistItems.map((item , order) => {
         const duration = item.videoInfo.contentDetails?.duration!
           ? toSeconds(parse(item.videoInfo.contentDetails?.duration))
           : 0;
@@ -41,6 +41,7 @@ export class CourseBuilder {
           title: item.snippet?.title || "Untitled Video",
           videoUrl: `https://www.youtube.com/watch?v=${item.contentDetails?.videoId}`,
           duration,
+          order: order + 1,
         };
       }),
     };
@@ -66,10 +67,11 @@ export class CourseBuilder {
         type: CourseType.video,
         userId: this.userId,
       },
-      videos: chapters.map((chapter) => ({
+      videos: chapters.map((chapter , order) => ({
         title: chapter.title,
         videoUrl: `https://www.youtube.com/watch?v=${videoId}&t=${chapter.timestamp}`,
         duration: chapter.duration,
+        order: order + 1,
       })),
     };
   }

@@ -1,4 +1,5 @@
-@use '../abstracts/variables' as *;
+@use "../abstracts/variables" as *;
+@use "../abstracts/mixins" as *;
 
 // Font families
 body {
@@ -9,7 +10,12 @@ body {
 }
 
 // Headings
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-weight: 700;
   line-height: 1.2;
   margin-bottom: var(--spacing-md);
@@ -55,7 +61,8 @@ a {
 }
 
 // Lists
-ul, ol {
+ul,
+ol {
   margin-bottom: var(--spacing-md);
   padding-left: var(--spacing-lg);
 }
@@ -70,7 +77,7 @@ blockquote {
 
 // Code
 code {
-  font-family: 'Courier New', Courier, monospace;
+  font-family: "Courier New", Courier, monospace;
   padding: 0.2em 0.4em;
   border-radius: 3px;
 }
@@ -81,16 +88,53 @@ small {
 }
 
 // Text utilities
-.text-center { text-align: center; }
-.text-left { text-align: left; }
-.text-right { text-align: right; }
-.text-uppercase { text-transform: uppercase; }
-.text-lowercase { text-transform: lowercase; }
-.text-capitalize { text-transform: capitalize; }
-.text-bold { font-weight: 700; }
-.text-italic { font-style: italic; }
+.text-center {
+  text-align: center;
+}
+.text-left {
+  text-align: left;
+}
+.text-right {
+  text-align: right;
+}
+.text-uppercase {
+  text-transform: uppercase;
+}
+.text-lowercase {
+  text-transform: lowercase;
+}
+.text-capitalize {
+  text-transform: capitalize;
+}
+.text-bold {
+  font-weight: 700;
+}
+.text-italic {
+  font-style: italic;
+}
 .text-truncate {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-} 
+}
+
+// typography
+
+.heading-xl {
+  @include heading(1.5rem, 700);
+}
+
+.heading-l {
+  @include heading(1.25rem, 700);
+}
+
+.heading-m {
+  @include heading(0.9375rem, 700);
+}
+
+.body {
+  @include heading(0.8125rem, 400);
+}
+.body-s {
+  @include heading(0.75rem, 400);
+}

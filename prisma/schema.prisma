@@ -32,6 +32,7 @@ model CourseVideo {
   duration Int
   isWatched Boolean @default(false)
   courseId String
+  order Int
   course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
 }
 
