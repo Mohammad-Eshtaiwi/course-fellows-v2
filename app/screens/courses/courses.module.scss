@@ -1,0 +1,25 @@
+.coursesPage {
+  min-height: 90vh;
+  padding: var(--spacing-lg);
+  background-color: var(--color-dark-800);
+  display: grid;
+}
+
+
+
+.coursesGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: var(--spacing-lg);
+  padding: var(--spacing-md);
+}
+
+
+
+.coursesContainer {
+  background-color: var(--color-dark-900);
+  height: 100%;
+  padding: var(--spacing-md);
+  border-radius: 8px;
+}
+

@@ -3,7 +3,8 @@ import { useQuery } from "@tanstack/react-query";
 
 const COURSES_ENDPOINT = "/api/user-courses";
 
-type Courses = Awaited<ReturnType<typeof getUserCourses>>;
+export type Courses = Awaited<ReturnType<typeof getUserCourses>>;
+export type Course = Courses[number];
 
 export function useCourses() {
   return useQuery<Courses>({
