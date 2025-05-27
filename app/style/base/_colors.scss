@@ -1,0 +1,74 @@
+@use "../abstracts/variables" as *;
+
+.bg-primary {
+  background-color: var(--color-primary);
+}
+
+.bg-primary-light {
+  background-color: var(--color-primary-light);
+}
+
+.bg-white {
+  background-color: var(--color-white-100);
+}
+
+.bg-dark-900 {
+  background-color: var(--color-dark-900);
+}
+
+.bg-dark-800 {
+  background-color: var(--color-dark-800);
+}
+
+.bg-dark-700 {
+  background-color: var(--color-dark-700);
+}
+
+.bg-dark-600 {
+  background-color: var(--color-dark-600);
+}
+
+.bg-grey {
+  background-color: var(--color-grey);
+}
+
+.text-primary {
+  color: var(--color-primary);
+}
+
+.text-primary-light {
+  color: var(--color-primary-light);
+}
+
+.text-white {
+  color: var(--color-white-100);
+}
+
+.text-dark-900 {
+  color: var(--color-dark-900);
+}
+
+.text-dark-800 {
+  color: var(--color-dark-800);
+}
+
+.text-dark-700 {
+  color: var(--color-dark-700);
+}
+
+.text-dark-600 {
+  color: var(--color-dark-600);
+}
+
+.text-grey {
+  color: var(--color-grey);
+}
+
+.shadow-primary-light {
+  box-shadow: 0 4px 12px rgba($color-primary-light, 0.3);
+  transition: box-shadow 0.3s ease;
+
+  &:hover {
+    box-shadow: 0 8px 24px rgba($color-primary-light, 0.5);
+  }
+}

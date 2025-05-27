@@ -1,0 +1,36 @@
+$padding: 8px;
+
+.courseCard {
+  background-color: var(--color-dark-800);
+  border-radius: 8px;
+  overflow: hidden;
+
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+
+  &:hover {
+    transform: translateY(-4px);
+  }
+}
+
+.courseCardImage {
+  overflow: hidden;
+  padding: $padding;
+  img {
+    border-radius: 8px;
+    object-fit: cover;
+  }
+}
+
+.courseCardContent {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: $padding;
+}
+
+.courseCardTitle {
+  max-width: 1000px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap; 
+}
