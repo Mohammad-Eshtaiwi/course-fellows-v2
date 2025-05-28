@@ -12,14 +12,9 @@ export async function getUserCourses(user: User) {
       thumbnailUrl: true,
       type: true,
       videos: {
-        take: 1,
-        where: {
-          isWatched: false,
-        },
-        orderBy: {
-          order: "asc",
-        },
         select: {
+          id: true,
+          isWatched: true,
           order: true,
           title: true,
           videoUrl: true,
@@ -32,5 +27,33 @@ export async function getUserCourses(user: User) {
     },
   });
 
-  return courses;
+  return courses.map((course) => {
+    const totalVideos = course.videos.length;
+    const completedVideos = course.videos.filter((v) => v.isWatched).length;
+    const totalDuration = course.videos.reduce((acc, v) => acc + v.duration, 0);
+    const nextVideo =
+      course.videos
+        .filter((v) => !v.isWatched)
+        .sort((a, b) => a.order - b.order)[0] || course.videos.at(-1);
+
+    return {
+      id: course.id,
+      title: course.title,
+      thumbnailUrl: course.thumbnailUrl,
+      type: course.type,
+      totalDuration: totalDuration,
+      nextVideo: {
+        id: nextVideo.id,
+        order: nextVideo.order,
+        title: nextVideo.title,
+        videoUrl: nextVideo.videoUrl,
+        duration: nextVideo.duration,
+      },
+      progress: {
+        total: totalVideos,
+        completed: completedVideos,
+        average: totalVideos > 0 ? (completedVideos / totalVideos) * 100 : 0,
+      },
+    };
+  });
 }

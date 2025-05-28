@@ -1,4 +1,4 @@
-$padding: 8px;
+$padding: 16px 12px;
 
 .courseCard {
   background-color: var(--color-dark-800);
@@ -13,12 +13,15 @@ $padding: 8px;
 }
 
 .courseCardImage {
+  position: relative;
+  width: 100%;
+  padding-top: 56.25%; // 16:9 aspect ratio
   overflow: hidden;
-  padding: $padding;
-  img {
-    border-radius: 8px;
-    object-fit: cover;
-  }
+}
+
+.courseImage {
+  object-fit: cover;
+  border-radius: 8px;
 }
 
 .courseCardContent {
@@ -32,5 +35,27 @@ $padding: 8px;
   max-width: 1000px;
   overflow: hidden;
   text-overflow: ellipsis;
-  white-space: nowrap; 
+  white-space: nowrap;
+}
+
+.courseMeta {
+  display: flex;
+  gap: 1rem;
+  border-top: 2px solid rgba(var(--color-primary-light-rgb), 0.1);
+  padding-top: 12px;
+}
+
+$meta-item-size: 0.875rem;
+.courseCardDuration,
+.totalVideos {
+  display: flex;
+  align-items: center;
+  gap: 0.5ch;
+  color: var(--text-secondary);
+  font-size: $meta-item-size;
+}
+
+.icon {
+  font-size: $meta-item-size;
+  color: var(--primary);
 }
