@@ -1,0 +1,65 @@
+.progressWrapper {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-radius: 9999px;
+}
+
+.progressBar {
+  flex: 1;
+  background-color: var(--color-gray-100);
+  border-radius: 9999px;
+  overflow: hidden;
+  position: relative;
+}
+
+.progressFill {
+  height: 100%;
+  transition: width 0.3s ease-in-out;
+  background-color: var(--color-primary);
+}
+
+// Sizes
+.small {
+  .progressBar {
+    height: 0.5rem;
+  }
+}
+
+.medium {
+  .progressBar {
+    height: 0.6rem;
+  }
+}
+
+.large {
+  .progressBar {
+    height: 1rem;
+  }
+}
+
+// Colors
+.primary {
+  .progressFill {
+    background-color: var(--color-primary);
+  }
+}
+
+.success {
+  .progressFill {
+    background-color: var(--color-success);
+  }
+}
+
+.warning {
+  .progressFill {
+    background-color: var(--color-warning);
+  }
+}
+
+.error {
+  .progressFill {
+    background-color: var(--color-error);
+  }
+} 
