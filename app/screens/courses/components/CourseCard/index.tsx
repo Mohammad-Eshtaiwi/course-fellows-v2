@@ -9,11 +9,15 @@ import IconButton from "@/app/components/IconButton";
 import Progress from "@/app/components/Progress";
 import { formatTimeDuration } from "@/app/utils/common.utils";
 import { IoMdTrash } from "react-icons/io";
+import Link from "next/link";
 
 function CourseCard({ course }: { course: Course }) {
   return (
     <article className={`${styles.courseCard} shadow-primary-light`}>
-      <div className={styles.courseCardImageWrapper}>
+      <Link
+        href={`/courses/${course.id}`}
+        className={styles.courseCardImageWrapper}
+      >
         <Image
           src={course.thumbnailUrl}
           alt={course.title}
@@ -22,9 +26,11 @@ function CourseCard({ course }: { course: Course }) {
           priority={false}
           className={styles.courseImage}
         />
-      </div>
+      </Link>
       <div className={styles.courseCardContent}>
-        <h3 className={` heading-l truncate`}>{course.title}</h3>
+        <Link href={`/courses/${course.id}`}>
+          <h3 className={` heading-l truncate`}>{course.title}</h3>
+        </Link>
         <Progress value={course.progress.average} className={styles.progress} />
 
         <div className={styles.nextVideo}>
@@ -49,9 +55,13 @@ function CourseCard({ course }: { course: Course }) {
             <MdOndemandVideo className={styles.icon} />
             {course.progress.total} videos
           </p>
-          <IconButton className={styles.deleteButton} icon={IoMdTrash} circle size="sm" variant="danger" />
-          
-
+          <IconButton
+            className={styles.deleteButton}
+            icon={IoMdTrash}
+            circle
+            size="sm"
+            variant="danger"
+          />
         </div>
       </div>
     </article>

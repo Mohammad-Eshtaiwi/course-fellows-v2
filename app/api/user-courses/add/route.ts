@@ -5,6 +5,7 @@ import {
 import { auth } from "@/app/api/auth/[...nextauth]/route";
 import { CourseBuilder } from "../../lib/youtube/course-builder";
 import { prisma } from "@/lib/prisma";
+import { COURSE_DEFAULT_NAME } from "@/app/constants/constants";
 
 type CourseType = "playlist" | "video";
 
@@ -17,7 +18,8 @@ function validateAndExtractParams(request: Request): UrlParams | null {
   const { searchParams } = new URL(request.url);
   const url = searchParams.get("url");
   const typeParam = searchParams.get("type");
-  const type = typeParam === "playlist" || typeParam === "video" ? typeParam : null;
+  const type =
+    typeParam === "playlist" || typeParam === "video" ? typeParam : null;
 
   if (!type) {
     throw new Error("type must be either 'playlist' or 'video'");
@@ -49,9 +51,10 @@ async function createCourseFromContent(
   id: string
 ): Promise<string> {
   const courseBuilder = new CourseBuilder(userId);
-  const { course, videos } = type === "playlist"
-    ? await courseBuilder.buildFromPlaylist(id)
-    : await courseBuilder.buildFromVideo(id);
+  const { course, videos } =
+    type === "playlist"
+      ? await courseBuilder.buildFromPlaylist(id)
+      : await courseBuilder.buildFromVideo(id);
 
   return await prisma.$transaction(async (tx) => {
     const createdCourse = await tx.course.create({
@@ -60,11 +63,19 @@ async function createCourseFromContent(
         userId,
       },
     });
+    const courseChapter = await tx.courseChapter.create({
+      data: {
+        title: COURSE_DEFAULT_NAME,
+        order: 1,
+        courseId: createdCourse.id,
+      },
+    });
 
     await tx.courseVideo.createMany({
       data: videos.map((video) => ({
         ...video,
         courseId: createdCourse.id,
+        chapterId: courseChapter.id,
       })),
     });
 
@@ -92,7 +103,8 @@ export async function GET(request: Request) {
 
     return buildSuccessResponse({ newCourseId }, 200);
   } catch (error) {
-    const errorMessage = error instanceof Error ? error.message : "Internal server error";
+    const errorMessage =
+      error instanceof Error ? error.message : "Internal server error";
     if (errorMessage.includes("No chapters")) {
       return buildErrorResponse(400, errorMessage);
     }

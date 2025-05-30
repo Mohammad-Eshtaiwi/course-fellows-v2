@@ -12,62 +12,84 @@ enum CourseType {
   video
 }
 
+/**
+ * A Course can have many CourseVideos and CourseChapters (one-to-many relationships)
+ * A CourseChapter can have many CourseVideos (one-to-many relationship)
+ * A User can have many Courses (one-to-many relationship)
+ * Each model's key fields are shown with their types
+ * Primary Keys (PK) and Foreign Keys (FK) are marked
+ * The relationships are shown with crow's foot notation
+ */
+
 // course schema
+
 model Course {
-  id String @id @default(cuid())
-  title String
+  id           String          @id @default(cuid())
+  title        String
   thumbnailUrl String
-  type CourseType
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  userId String
-  videos CourseVideo[]
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type         CourseType
+  createdAt    DateTime        @default(now())
+  updatedAt    DateTime        @updatedAt
+  userId       String
+  videos       CourseVideo[]
+  user         User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  chapters     CourseChapter[]
 }
 
 model CourseVideo {
-  id String @id @default(cuid())
-  title String
-  videoUrl String
-  duration Int
-  isWatched Boolean @default(false)
+  id        String        @id @default(cuid())
+  title     String
+  videoUrl  String
+  duration  Int
+  isWatched Boolean       @default(false)
+  courseId  String
+  order     Int
+  course    Course        @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  chapterId String?
+  chapter   CourseChapter? @relation(fields: [chapterId], references: [id], onDelete: Cascade)
+}
+
+model CourseChapter {
+  id       String        @id @default(cuid())
+  title    String
   courseId String
-  order Int
-  course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  order    Int
+  course   Course        @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  videos   CourseVideo[]
 }
 
 // nextjs auth schemas
 
 model Account {
-  id                 String  @id @default(cuid())
-  userId             String  @map("user_id")
-  type               String
-  provider           String
-  providerAccountId  String  @map("provider_account_id")
-  refresh_token      String? @db.Text
-  access_token       String? @db.Text
-  expires_at         Int?
-  token_type         String?
-  scope              String?
-  id_token           String? @db.Text
-  session_state      String?
- 
+  id                String  @id @default(cuid())
+  userId            String  @map("user_id")
+  type              String
+  provider          String
+  providerAccountId String  @map("provider_account_id")
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
- 
+
   @@unique([provider, providerAccountId])
   @@map("accounts")
 }
- 
+
 model Session {
   id           String   @id @default(cuid())
   sessionToken String   @unique @map("session_token")
   userId       String   @map("user_id")
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
- 
+
   @@map("sessions")
 }
- 
+
 model User {
   id            String    @id @default(cuid())
   name          String?
@@ -77,15 +99,15 @@ model User {
   accounts      Account[]
   sessions      Session[]
   courses       Course[]
- 
+
   @@map("users")
 }
- 
+
 model VerificationToken {
   identifier String
   token      String
   expires    DateTime
- 
+
   @@unique([identifier, token])
   @@map("verification_tokens")
 }

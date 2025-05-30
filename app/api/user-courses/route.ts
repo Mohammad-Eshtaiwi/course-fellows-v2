@@ -13,7 +13,6 @@ export async function GET() {
     }
 
     const courses = await getUserCourses(user.user);
-    console.log(courses);
 
     return buildSuccessResponse(courses);
   } catch (error) {

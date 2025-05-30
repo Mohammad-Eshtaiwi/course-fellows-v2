@@ -1,31 +1,31 @@
-import React from 'react';
-import styles from './Button.module.scss';
+import React from "react";
+import styles from "./Button.module.scss";
 
 interface ButtonProps {
   children: React.ReactNode;
-  variant?: 'primary';
-  size?: 'small' | 'medium' | 'large';
+  variant?: "primary";
+  size?: "small" | "medium" | "large";
   onClick?: () => void;
   disabled?: boolean;
-  type?: 'button' | 'submit' | 'reset';
+  type?: "button" | "submit" | "reset";
   className?: string;
 }
 
 const Button: React.FC<ButtonProps> = ({
   children,
-  variant = 'primary',
-  size = 'medium',
+  variant = "primary",
+  size = "medium",
   onClick,
   disabled = false,
-  type = 'button',
-  className = '',
+  type = "button",
+  className = "",
 }) => {
   const buttonClasses = [
     styles.button,
     styles[variant],
     styles[size],
     className,
-  ].join(' ');
+  ].join(" ");
 
   return (
     <button
