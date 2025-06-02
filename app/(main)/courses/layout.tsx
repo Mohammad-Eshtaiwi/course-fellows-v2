@@ -10,7 +10,7 @@ export default function CoursesLayout({ children }: CoursesLayoutProps) {
   return (
     <div className={styles.mainLayout}>
       <Header />
-      <main>{children}</main>
+      <main className={styles.main}>{children}</main>
     </div>
   );
 }

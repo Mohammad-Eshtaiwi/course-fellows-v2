@@ -132,6 +132,10 @@ small {
   @include heading(0.9375rem, 700);
 }
 
+.heading-s {
+  @include heading(0.875rem, 700);
+}
+
 .body {
   @include heading(0.8125rem, 400);
 }

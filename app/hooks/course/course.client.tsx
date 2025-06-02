@@ -1,10 +1,10 @@
-import { getUserCourses } from "@/app/api/user-courses/getUserCourses";
+import { getUserCourse } from "@/app/api/user-courses/[id]/getUserCourse";
 import { useQuery } from "@tanstack/react-query";
 
 const COURSE_ENDPOINT = "/api/user-courses";
 
-export type Courses = Awaited<ReturnType<typeof getUserCourses>>;
-export type Course = Courses[number];
+export type Course = Awaited<ReturnType<typeof getUserCourse>>;
+
 
 export function useCourse(id: string) {
   return useQuery<Course>({

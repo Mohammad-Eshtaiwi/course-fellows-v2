@@ -1,0 +1,18 @@
+.isWatched {
+  font-size: 1rem;
+  font-weight: 700;
+  display: flex;
+  place-content: center;
+  color: #f1f1f1;
+  width: 1.5ch;
+  height: 1.5ch;
+  border-radius: 50%;
+  border: 3px solid var(--color-green);
+  display: inline-block;
+  text-align: center;
+  line-height: 0.5;
+  &[data-iswatched="true"] {
+    background-color: var(--color-green);
+    color: var(--white);
+  }
+}

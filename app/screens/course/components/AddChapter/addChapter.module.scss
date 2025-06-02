@@ -1,0 +1,28 @@
+.addChapter {
+  all: unset;
+  display: flex;
+  align-items: center;
+  align-self: start;
+  background: linear-gradient(
+    to right,
+    var(--color-dark-800),
+    var(--color-dark-700)
+  );
+  border-radius: 8px;
+  padding: 1.5rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+  &:hover {
+    background: linear-gradient(
+      to right,
+      var(--color-dark-800),
+      var(--color-dark-900)
+    );
+  }
+}
+
+.icon {
+  width: 1.5rem;
+  height: 1.5rem;
+  margin-inline-end: 0.5rem;
+}

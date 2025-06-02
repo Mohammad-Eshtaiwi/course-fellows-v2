@@ -1,3 +1,11 @@
 .courseScreen {
   padding: 24px;
 }
+
+.chaptersWrapper {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: clamp(250px, 30%, 400px);
+  gap: 1.5rem;
+  overflow-x: auto;
+}
