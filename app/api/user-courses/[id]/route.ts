@@ -7,14 +7,14 @@ import { getUserCourse } from "./getUserCourse";
 
 export async function GET(
   _: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   const user = await auth();
   if (!user) {
     return buildErrorResponse(401, "Unauthorized");
   }
 
-  const { id } = params;
+  const { id } = await params;
   if (!id) {
     return buildErrorResponse(400, "Course ID is required");
   }

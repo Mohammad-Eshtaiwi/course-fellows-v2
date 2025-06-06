@@ -23,6 +23,7 @@ export default function CourseScreen() {
         {course.chapters.map((chapter) => (
           <Chapter
             key={chapter.id}
+            id={chapter.id}
             title={chapter.title}
             state={chapter.state}
             count={chapter.videos.length}

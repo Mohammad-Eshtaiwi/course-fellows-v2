@@ -1,19 +1,19 @@
 import styles from "./chapter.module.scss";
+import { Title } from "./components/Title";
 interface ChapterProps {
   title: string;
   state: "completed" | "in-progress" | "not-started";
   count: number;
   children: React.ReactNode;
+  id: string;
 }
 
-function Chapter({ title, state, count, children }: ChapterProps) {
+function Chapter({ title, state, count, children, id }: ChapterProps) {
   return (
     <div>
       <div className={`${styles.header} heading-s`}>
         <span className={`${styles.state}`} data-state={state} />
-        <h3 className={`${styles.title} heading-m`}>
-          {title} <span>({count})</span>
-        </h3>
+        <Title title={title} count={count} chapterId={id} />
       </div>
       <div className={`${styles.content}`}>{children}</div>
     </div>
