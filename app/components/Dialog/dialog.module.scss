@@ -1,0 +1,57 @@
+.dialog {
+  position: relative;
+  z-index: 50;
+}
+
+.dialogOverlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(2px);
+}
+
+.dialogContainer {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.dialogPanel {
+  background: var(--color-dark-800);
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  width: 100%;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
+    0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+.dialogTitle {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--color-light-100);
+  margin-bottom: 1.5rem;
+}
+
+// Max width variants
+.sm {
+  max-width: 24rem;
+}
+
+.md {
+  max-width: 32rem;
+}
+
+.lg {
+  max-width: 40rem;
+}
+
+.xl {
+  max-width: 48rem;
+}
+
+.xxl {
+  max-width: 56rem;
+}

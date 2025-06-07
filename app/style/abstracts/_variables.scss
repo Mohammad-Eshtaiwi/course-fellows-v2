@@ -1,5 +1,6 @@
 $color-primary: #635fc7;
 $color-primary-light: #a8a4ff;
+$color-grey: #828fa3;
 :root {
   // Colors
   --color-primary: #635fc7;
@@ -13,13 +14,17 @@ $color-primary-light: #a8a4ff;
   --color-primary-light-rgb: 168, 164, 255;
 
   --color-white-100: #ffffff;
+  --color-white-100-50: #ffffff80;
   --color-very-dark: #20212c;
   --color-dark-900: #000112;
   --color-dark-800: #2b2c37;
   --color-dark-800-50: #802b2c37;
   --color-dark-700: #1a1a1a;
   --color-dark-600: #1e1e1e;
+  --color-dark-500: #252631;
+  --color-dark-400: #343a4f;
   --color-grey: #828fa3;
+  --color-grey-light: #828fa340;
 
   --color-red: #ea5555;
   --color-red-light: #ff9898;

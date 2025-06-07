@@ -1,3 +1,4 @@
+import { CreateChapterSchema } from "@/app/api/chapters/[courseId]/schema";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 const CHAPTERS_ENDPOINT = "/api/chapters";
@@ -50,5 +51,28 @@ export function useUpdateChapterTitle() {
     onSettled: (_, __, { courseId }) => {
       queryClient.invalidateQueries({ queryKey: ["course", courseId] });
     },
+  });
+}
+
+export function useCreateChapter(onSuccess: () => void) {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async ({
+      courseId,
+      title,
+    }: {
+      courseId: string;
+    } & CreateChapterSchema) => {
+      const response = await fetch(`${CHAPTERS_ENDPOINT}/${courseId}`, {
+        method: "POST",
+        body: JSON.stringify({ title }),
+      });
+      if (!response.ok) {
+        throw new Error("Failed to create chapter");
+      }
+      queryClient.invalidateQueries({ queryKey: ["course", courseId] });
+      return response.json();
+    },
+    onSuccess,
   });
 }

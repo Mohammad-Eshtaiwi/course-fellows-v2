@@ -10,7 +10,7 @@ interface ChapterProps {
 
 function Chapter({ title, state, count, children, id }: ChapterProps) {
   return (
-    <div>
+    <div className={styles.chapter}>
       <div className={`${styles.header} heading-s`}>
         <span className={`${styles.state}`} data-state={state} />
         <Title title={title} count={count} chapterId={id} />
