@@ -33,7 +33,7 @@ export class CourseBuilder {
         type: CourseType.playlist,
         userId: this.userId,
       },
-      videos: playlistItems.map((item , order) => {
+      videos: playlistItems.filter((item) => item.videoInfo).map((item, order) => {
         const duration = item.videoInfo.contentDetails?.duration!
           ? toSeconds(parse(item.videoInfo.contentDetails?.duration))
           : 0;
@@ -42,6 +42,7 @@ export class CourseBuilder {
           videoUrl: `https://www.youtube.com/watch?v=${item.contentDetails?.videoId}`,
           duration,
           order: order + 1,
+          chapterId: null,
         };
       }),
     };
@@ -56,7 +57,13 @@ export class CourseBuilder {
 
     const thumbnailUrl = video.snippet?.thumbnails?.high?.url || "";
     const description = video.snippet?.description || "";
-    const chapters = chaptersExtractor(description);
+    const videoDuration =
+      toSeconds(parse(video.contentDetails?.duration!));
+    console.log("videoDuration", videoDuration);
+
+    const chapters = chaptersExtractor(description, videoDuration);
+    console.log("chapters", chapters);
+
     if (chapters.length === 0) {
       throw new Error("No chapters found");
     }
@@ -67,11 +74,12 @@ export class CourseBuilder {
         type: CourseType.video,
         userId: this.userId,
       },
-      videos: chapters.map((chapter , order) => ({
+      videos: chapters.map((chapter, order) => ({
         title: chapter.title,
         videoUrl: `https://www.youtube.com/watch?v=${videoId}&t=${chapter.timestamp}`,
         duration: chapter.duration,
         order: order + 1,
+        chapterId: null,
       })),
     };
   }

@@ -1,58 +1,67 @@
 "use client";
 
+import { useState } from "react";
 import Container from "@/app/components/Container";
 import styles from "./courses.module.scss";
-import { useCourses, Courses } from "@/app/hooks/courses/courses.client";
-import CourseCard from "./components/CourseCard";
-import Spinner from "@/app/components/Spinner";
-
-const CoursesHeader = ({ count }: { count: number }) => (
-  <div className={styles.coursesHeader}>
-    <p className="heading-l">
-      My Courses <sup>({count})</sup>
-    </p>
-  </div>
-);
-
-const CoursesList = ({ courses }: { courses: Courses }) => (
-  <div className={styles.coursesGrid}>
-    {courses.map((course) => (
-      <CourseCard key={course.id} course={course} />
-    ))}
-  </div>
-);
-
-const NoCourses = () => (
-  <div className={styles.noCourses}>
-    <p className="body-l">
-      You have no courses. Create a new course to get started.
-    </p>
-  </div>
-);
-
-const LoadingState = () => (
-  <div className={styles.loadingContainer}>
-    <Spinner size="lg" color="primary" />
-  </div>
-);
+import { useCourses, Course } from "@/app/hooks/courses/courses.client";
+import CoursesHeader from "./components/CoursesHeader";
+import CoursesList from "./components/CoursesList";
+import NoCourses from "./components/NoCourses";
+import LoadingState from "./components/LoadingState";
+import AddCourseDialog from "./components/AddCourseDialog";
+import DeleteCourseDialog from "./components/DeleteCourseDialog";
 
 export default function CoursesScreen() {
   const { data, isLoading } = useCourses();
   const coursesCount = data?.length || 0;
+  const [isAddCourseDialogOpen, setIsAddCourseDialogOpen] = useState(false);
+  const [isDeleteCourseDialogOpen, setIsDeleteCourseDialogOpen] = useState(false);
+  const [courseToDelete, setCourseToDelete] = useState<Course | null>(null);
+
+  const handleOpenAddCourseDialog = () => {
+    setIsAddCourseDialogOpen(true);
+  };
+
+  const handleCloseAddCourseDialog = () => {
+    setIsAddCourseDialogOpen(false);
+  };
+
+  const handleDeleteCourse = (course: Course) => {
+    setCourseToDelete(course);
+    setIsDeleteCourseDialogOpen(true);
+  };
+
+  const handleCloseDeleteCourseDialog = () => {
+    setIsDeleteCourseDialogOpen(false);
+    setCourseToDelete(null);
+  };
 
   return (
     <div className={styles.coursesPage}>
       <Container className={styles.coursesContainer}>
-        <CoursesHeader count={coursesCount} />
+        <CoursesHeader 
+          count={coursesCount} 
+          onAddCourse={handleOpenAddCourseDialog}
+        />
 
         {isLoading ? (
           <LoadingState />
         ) : coursesCount > 0 && data ? (
-          <CoursesList courses={data} />
+          <CoursesList courses={data} onDeleteCourse={handleDeleteCourse} />
         ) : (
           <NoCourses />
         )}
       </Container>
+
+      <AddCourseDialog
+        isOpen={isAddCourseDialogOpen}
+        onClose={handleCloseAddCourseDialog}
+      />
+      <DeleteCourseDialog
+        isOpen={isDeleteCourseDialogOpen}
+        onClose={handleCloseDeleteCourseDialog}
+        course={courseToDelete}
+      />
     </div>
   );
 }

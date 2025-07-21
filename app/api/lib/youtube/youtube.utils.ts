@@ -1,4 +1,21 @@
-export const chaptersExtractor = (description: string) => {
+/**
+ * Calculates the duration of a chapter based on its position in the chapters array
+ * @param currentChapter - The current chapter object
+ * @param nextChapter - The next chapter object (undefined if current is last)
+ * @param videoDuration - Total video duration in seconds
+ * @returns Duration of the current chapter in seconds
+ */
+const calculateChapterDuration = (
+  currentChapter: { totalSeconds: number },
+  nextChapter: { totalSeconds: number } | undefined,
+  videoDuration: number
+): number => {
+  return nextChapter
+    ? nextChapter.totalSeconds - currentChapter.totalSeconds
+    : videoDuration - currentChapter.totalSeconds;
+};
+
+export const chaptersExtractor = (description: string, videoDuration: number) => {
   // Regular expression to match timestamps in format HH:MM:SS or MM:SS followed by chapter title
   // Example matches:
   // "0:00 Introduction"
@@ -12,10 +29,9 @@ export const chaptersExtractor = (description: string) => {
   // (\d{2}))                    - Seconds (exactly 2 digits)
   // \s+                         - One or more whitespace characters
   // (.+?)                       - Chapter title (any characters, non-greedy)
-  // (?=\n(?:(\d{1,2}):)?(\d{1,2}):(\d{2})|$)  - Look ahead for next timestamp or end of string
+  // (?=\n(?:(?:\d{1,2}:)?\d{1,2}:\d{2}\s|[^0-9])|$)  - Look ahead for next timestamp, non-timestamp content, or end of string
   const timestampRegex =
-    /(?:^|\n)(?:(?:(\d{1,2}):)?(\d{1,2}):(\d{2}))\s+(.+?)(?=\n(?:(\d{1,2}):)?(\d{1,2}):(\d{2})|$)/g;
-
+    /(?:^|\n)(?:(?:(\d{1,2}):)?(\d{1,2}):(\d{2}))\s+(.+?)(?=\n(?:(?:\d{1,2}:)?\d{1,2}:\d{2}\s|[^0-9])|$)/g;
   const chapters: {
     timestamp: string;
     title: string;
@@ -48,9 +64,10 @@ export const chaptersExtractor = (description: string) => {
   return chapters.map((chapter, idx) => ({
     title: chapter.title,
     timestamp: chapter.timestamp,
-    duration:
-      idx === chapters.length - 1
-        ? chapter.totalSeconds
-        : chapters[idx + 1].totalSeconds - chapter.totalSeconds,
+    duration: calculateChapterDuration(
+      chapter,
+      chapters[idx + 1],
+      videoDuration
+    ),
   }));
 };

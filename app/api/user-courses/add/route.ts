@@ -6,6 +6,8 @@ import { auth } from "@/app/api/auth/[...nextauth]/route";
 import { CourseBuilder } from "../../lib/youtube/course-builder";
 import { prisma } from "@/lib/prisma";
 import { COURSE_DEFAULT_NAME } from "@/app/constants/constants";
+import { NextResponse } from "next/server";
+import { PLAYLIST_ID_REQUIRED, VIDEO_ID_REQUIRED } from "./add.constants";
 
 type CourseType = "playlist" | "video";
 
@@ -14,7 +16,7 @@ interface UrlParams {
   id: string;
 }
 
-function validateAndExtractParams(request: Request): UrlParams | null {
+function validateAndExtractParams(request: Request): UrlParams | NextResponse {
   const { searchParams } = new URL(request.url);
   const url = searchParams.get("url");
   const typeParam = searchParams.get("type");
@@ -34,9 +36,9 @@ function validateAndExtractParams(request: Request): UrlParams | null {
   const playlistId = urlObj.searchParams.get("list");
 
   if (type === "playlist" && !playlistId) {
-    throw new Error("playlistId is required");
+    return buildErrorResponse(400, PLAYLIST_ID_REQUIRED);
   } else if (type === "video" && !videoId) {
-    throw new Error("videoId is required");
+    return buildErrorResponse(400, VIDEO_ID_REQUIRED);
   }
 
   return {
@@ -95,6 +97,12 @@ export async function GET(request: Request) {
       return buildErrorResponse(400, "Invalid parameters");
     }
 
+    if (params instanceof NextResponse) {
+      // if the params is a NextResponse, then it means that the request is invalid
+      // so we return the response
+      return params;
+    }
+
     const newCourseId = await createCourseFromContent(
       user.user.id,
       params.type,
@@ -103,6 +111,8 @@ export async function GET(request: Request) {
 
     return buildSuccessResponse({ newCourseId }, 200);
   } catch (error) {
+    console.log(error);
+
     const errorMessage =
       error instanceof Error ? error.message : "Internal server error";
     if (errorMessage.includes("No chapters")) {

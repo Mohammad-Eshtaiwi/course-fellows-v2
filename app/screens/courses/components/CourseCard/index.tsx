@@ -7,11 +7,22 @@ import styles from "./styles.module.scss";
 
 import IconButton from "@/app/components/IconButton";
 import Progress from "@/app/components/Progress";
-import { formatTimeDuration } from "@/app/utils/common.utils";
+import { formatDurationToHoursMinutes  } from "@/app/utils/common.utils";
 import { IoMdTrash } from "react-icons/io";
 import Link from "next/link";
 
-function CourseCard({ course }: { course: Course }) {
+interface CourseCardProps {
+  course: Course;
+  onDelete: (course: Course) => void;
+}
+
+function CourseCard({ course, onDelete }: CourseCardProps) {
+  const handleDeleteClick = (e: React.MouseEvent) => {
+    e.preventDefault(); // Prevent Link navigation
+    e.stopPropagation();
+    onDelete(course);
+  };
+
   return (
     <article className={`${styles.courseCard} shadow-primary-light`}>
       <Link
@@ -42,14 +53,14 @@ function CourseCard({ course }: { course: Course }) {
               {course.nextVideo.title}
             </p>
             <p className={`body-s ${styles.nextVideoDuration}`}>
-              {formatTimeDuration(course.nextVideo.duration)}
+              {formatDurationToHoursMinutes (course.nextVideo.duration)}
             </p>
           </div>
         </div>
         <div className={styles.courseMeta}>
           <p className={`${styles.courseCardDuration} body-s`}>
             <BsClock className={styles.icon} />
-            {formatTimeDuration(course.totalDuration)}
+            {formatDurationToHoursMinutes (course.totalDuration)}
           </p>
           <p className={`${styles.totalVideos} body-s`}>
             <MdOndemandVideo className={styles.icon} />
@@ -61,6 +72,7 @@ function CourseCard({ course }: { course: Course }) {
             circle
             size="sm"
             variant="danger"
+            onClick={handleDeleteClick}
           />
         </div>
       </div>

@@ -60,20 +60,6 @@ a {
   }
 }
 
-// Lists
-ul,
-ol {
-  margin-bottom: var(--spacing-md);
-  padding-left: var(--spacing-lg);
-}
-
-// Blockquotes
-blockquote {
-  font-style: italic;
-  border-left: 4px solid;
-  padding-left: var(--spacing-md);
-  margin: var(--spacing-md) 0;
-}
 
 // Code
 code {
@@ -91,27 +77,35 @@ small {
 .text-center {
   text-align: center;
 }
+
 .text-left {
   text-align: left;
 }
+
 .text-right {
   text-align: right;
 }
+
 .text-uppercase {
   text-transform: uppercase;
 }
+
 .text-lowercase {
   text-transform: lowercase;
 }
+
 .text-capitalize {
   text-transform: capitalize;
 }
+
 .text-bold {
   font-weight: 700;
 }
+
 .text-italic {
   font-style: italic;
 }
+
 .text-truncate {
   overflow: hidden;
   text-overflow: ellipsis;
@@ -139,6 +133,7 @@ small {
 .body {
   @include heading(0.8125rem, 400);
 }
+
 .body-s {
   @include heading(0.75rem, 400);
 }

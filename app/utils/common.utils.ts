@@ -1,8 +1,13 @@
 import { intervalToDuration, formatDuration } from "date-fns";
 
-export function formatTimeDuration(duration: number) {
-  const durationObj = intervalToDuration({ start: 0, end: duration * 1000 });
-  return formatDuration(durationObj, { format: ["hours", "minutes"] });
+export function formatDurationToHoursMinutes(durationInSeconds: number) {
+  const totalHours = Math.floor(durationInSeconds / 3600)
+  const minutes = Math.floor((durationInSeconds % 3600) / 60)
+
+  return formatDuration(
+    { hours: totalHours, minutes },
+    { format: ['hours', 'minutes'] }
+  )
 }
 
 export function formatTimeDurationCompact(seconds: number): string {
