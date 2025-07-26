@@ -24,12 +24,12 @@ export class CourseBuilder {
 
     // Get the first video to use its thumbnail as the course thumbnail
     const firstVideo = playlistItems[0];
-    const thumbnailUrl = firstVideo.snippet?.thumbnails?.high?.url || "";
+    const courseThumbnailUrl = firstVideo.snippet?.thumbnails?.high?.url || "";
 
     return {
       course: {
         title: firstVideo.snippet?.title || "Untitled Playlist",
-        thumbnailUrl,
+        thumbnail: courseThumbnailUrl,
         type: CourseType.playlist,
         userId: this.userId,
       },
@@ -39,10 +39,11 @@ export class CourseBuilder {
           : 0;
         return {
           title: item.snippet?.title || "Untitled Video",
-          videoUrl: `https://www.youtube.com/watch?v=${item.contentDetails?.videoId}`,
+          url: `https://www.youtube.com/watch?v=${item.contentDetails?.videoId}`,
           duration,
           order: order + 1,
           chapterId: null,
+          thumbnail: item.snippet?.thumbnails?.high?.url || "",
         };
       }),
     };
@@ -55,14 +56,12 @@ export class CourseBuilder {
       throw new Error("Failed to fetch video information");
     }
 
-    const thumbnailUrl = video.snippet?.thumbnails?.high?.url || "";
+    const courseThumbnailUrl = video.snippet?.thumbnails?.high?.url || "";
     const description = video.snippet?.description || "";
     const videoDuration =
       toSeconds(parse(video.contentDetails?.duration!));
-    console.log("videoDuration", videoDuration);
 
     const chapters = chaptersExtractor(description, videoDuration);
-    console.log("chapters", chapters);
 
     if (chapters.length === 0) {
       throw new Error("No chapters found");
@@ -70,16 +69,17 @@ export class CourseBuilder {
     return {
       course: {
         title: video.snippet?.title!,
-        thumbnailUrl,
+        thumbnail: courseThumbnailUrl,
         type: CourseType.video,
         userId: this.userId,
       },
       videos: chapters.map((chapter, order) => ({
         title: chapter.title,
-        videoUrl: `https://www.youtube.com/watch?v=${videoId}&t=${chapter.timestamp}`,
+        url: `https://www.youtube.com/watch?v=${videoId}&t=${chapter.timestamp}`,
         duration: chapter.duration,
         order: order + 1,
         chapterId: null,
+        thumbnail: video.snippet?.thumbnails?.high?.url || "",
       })),
     };
   }

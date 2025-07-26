@@ -88,8 +88,6 @@ $meta-item-size: 0.875rem;
 .courseMeta {
   display: flex;
   gap: 1rem;
-  border-top: 2px solid rgba(var(--color-primary-light-rgb), 0.1);
-  padding-top: 12px;
   color: var(--color-grey);
   .deleteButton {
     margin-inline-start: auto;

@@ -7,9 +7,10 @@ import styles from "./styles.module.scss";
 
 import IconButton from "@/app/components/IconButton";
 import Progress from "@/app/components/Progress";
-import { formatDurationToHoursMinutes  } from "@/app/utils/common.utils";
+import { formatDurationToHoursMinutes } from "@/app/utils/common.utils";
 import { IoMdTrash } from "react-icons/io";
 import Link from "next/link";
+import clsx from "clsx";
 
 interface CourseCardProps {
   course: Course;
@@ -23,6 +24,9 @@ function CourseCard({ course, onDelete }: CourseCardProps) {
     onDelete(course);
   };
 
+  const courseMetaStyle = clsx("border-dividor", styles.courseMeta)
+
+
   return (
     <article className={`${styles.courseCard} shadow-primary-light`}>
       <Link
@@ -30,7 +34,7 @@ function CourseCard({ course, onDelete }: CourseCardProps) {
         className={styles.courseCardImageWrapper}
       >
         <Image
-          src={course.thumbnailUrl}
+          src={course.thumbnail}
           alt={course.title}
           fill
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
@@ -53,14 +57,14 @@ function CourseCard({ course, onDelete }: CourseCardProps) {
               {course.nextVideo.title}
             </p>
             <p className={`body-s ${styles.nextVideoDuration}`}>
-              {formatDurationToHoursMinutes (course.nextVideo.duration)}
+              {formatDurationToHoursMinutes(course.nextVideo.duration)}
             </p>
           </div>
         </div>
-        <div className={styles.courseMeta}>
+        <div className={courseMetaStyle}>
           <p className={`${styles.courseCardDuration} body-s`}>
             <BsClock className={styles.icon} />
-            {formatDurationToHoursMinutes (course.totalDuration)}
+            {formatDurationToHoursMinutes(course.totalDuration)}
           </p>
           <p className={`${styles.totalVideos} body-s`}>
             <MdOndemandVideo className={styles.icon} />

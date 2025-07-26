@@ -9,7 +9,7 @@ export async function getUserCourses(user: User) {
     select: {
       id: true,
       title: true,
-      thumbnailUrl: true,
+      thumbnail: true,
       type: true,
       videos: {
         select: {
@@ -17,7 +17,7 @@ export async function getUserCourses(user: User) {
           isWatched: true,
           order: true,
           title: true,
-          videoUrl: true,
+          url: true,
           duration: true,
         },
       },
@@ -39,14 +39,14 @@ export async function getUserCourses(user: User) {
     return {
       id: course.id,
       title: course.title,
-      thumbnailUrl: course.thumbnailUrl,
+      thumbnail: course.thumbnail,
       type: course.type,
       totalDuration: totalDuration,
       nextVideo: {
         id: nextVideo.id,
         order: nextVideo.order,
         title: nextVideo.title,
-        videoUrl: nextVideo.videoUrl,
+        videoUrl: nextVideo.url,
         duration: nextVideo.duration,
       },
       progress: {

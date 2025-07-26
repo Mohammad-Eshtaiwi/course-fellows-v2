@@ -1,11 +1,14 @@
 .courseScreen {
-  padding: 24px;
+  --course-sidebar-width: 440px;
+  display: grid;
+  grid-template-columns: var(--course-sidebar-width) 1fr;
+  gap: 1.5rem;
 }
 
-.chaptersWrapper {
-  display: grid;
-  grid-auto-flow: column;
-  grid-auto-columns: clamp(250px, 30%, 400px);
-  gap: 1.5rem;
-  overflow-x: auto;
+
+.courseSideBar {
+  border-radius: 8px;
+  background-color: var(--color-dark-800);
+  height: fit-content;
+  padding: 1rem;
 }

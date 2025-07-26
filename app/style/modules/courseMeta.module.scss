@@ -1,0 +1,31 @@
+// meta
+$meta-item-size: 0.875rem;
+
+.courseMeta {
+    display: flex;
+    gap: 1rem;
+    color: var(--color-grey);
+
+    .deleteButton {
+        margin-inline-start: auto;
+        width: $meta-item-size * 1.75;
+        height: $meta-item-size * 1.75;
+
+        svg {
+            width: $meta-item-size * 1.25;
+            height: $meta-item-size * 1.25;
+        }
+    }
+}
+
+.courseCardDuration,
+.totalVideos {
+    display: flex;
+    align-items: center;
+    gap: 0.5ch;
+    color: var(--text-secondary);
+}
+
+.icon {
+    font-size: $meta-item-size;
+}

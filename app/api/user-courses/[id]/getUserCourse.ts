@@ -6,8 +6,6 @@ type CourseChapterWithVideos = CourseChapter & {
 };
 
 export async function getUserCourse(id: string) {
-  console.log("getUserCourse", id);
-
   const course = await prisma.course
     .findUnique({
       where: {
@@ -16,7 +14,11 @@ export async function getUserCourse(id: string) {
       include: {
         chapters: {
           include: {
-            videos: true,
+            videos: {
+              orderBy: {
+                order: 'asc',
+              },
+            },
           },
         },
       },
@@ -40,7 +42,25 @@ export async function getUserCourse(id: string) {
       };
     });
 
-  return course;
+  if (!course) {
+    return null;
+  }
+
+  const duration = course?.chapters.reduce((acc, chapter) => {
+    return acc + chapter.videos.reduce((acc, video) => acc + video.duration, 0);
+  }, 0);
+
+  const videoCount = course?.chapters.reduce((acc, chapter) => {
+    return acc + chapter.videos.length;
+  }, 0);
+
+  const watchedCount = course?.chapters.reduce((acc, chapter) => {
+    return acc + chapter.videos.reduce((acc, video) => acc + Number(video.isWatched), 0);
+  }, 0);
+
+  const progress = videoCount > 0 ? Math.floor((watchedCount / videoCount) * 100) : 0;
+
+  return { ...course, duration, videoCount, progress };
 }
 
 function getChapterState(chapter: CourseChapterWithVideos) {

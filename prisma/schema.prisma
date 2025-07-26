@@ -24,27 +24,28 @@ enum CourseType {
 // course schema
 
 model Course {
-  id           String          @id @default(cuid())
-  title        String
-  thumbnailUrl String
-  type         CourseType
-  createdAt    DateTime        @default(now())
-  updatedAt    DateTime        @updatedAt
-  userId       String
-  videos       CourseVideo[]
-  user         User            @relation(fields: [userId], references: [id], onDelete: Cascade)
-  chapters     CourseChapter[]
+  id        String          @id @default(cuid())
+  title     String
+  thumbnail String
+  type      CourseType
+  createdAt DateTime        @default(now())
+  updatedAt DateTime        @updatedAt
+  userId    String
+  videos    CourseVideo[]
+  user      User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  chapters  CourseChapter[]
 }
 
 model CourseVideo {
-  id        String        @id @default(cuid())
+  id        String         @id @default(cuid())
   title     String
-  videoUrl  String
+  url  String
+  thumbnail String
   duration  Int
-  isWatched Boolean       @default(false)
+  isWatched Boolean        @default(false)
   courseId  String
   order     Int
-  course    Course        @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  course    Course         @relation(fields: [courseId], references: [id], onDelete: Cascade)
   chapterId String?
   chapter   CourseChapter? @relation(fields: [chapterId], references: [id], onDelete: Cascade)
 }
