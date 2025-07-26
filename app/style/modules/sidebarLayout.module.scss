@@ -1,0 +1,13 @@
+.sidebarLayout {
+    display: grid;
+    grid-template-columns: 25vw 1fr;
+    grid-template-rows: auto 1fr;
+    grid-template-areas:
+        "sidebar header"
+        "sidebar main";
+}
+
+.main {
+    grid-area: main;
+    overflow-y: auto;
+}

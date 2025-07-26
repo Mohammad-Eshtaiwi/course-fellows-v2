@@ -12,7 +12,9 @@ export default function CourseScreen() {
 
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <Container className={clsx(styles.courseScreen)}>
+      <div>Loading...</div>
+    </Container>
   }
 
   if (!course) {
