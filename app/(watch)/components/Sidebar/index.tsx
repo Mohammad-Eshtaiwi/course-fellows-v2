@@ -1,5 +1,6 @@
 "use client";
 import { useCourse } from "@/app/hooks/course/course.client";
+import { useToggleVideoWatchStatus } from "@/app/hooks/video/video.client";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import styles from "./sidebar.module.scss";
@@ -13,6 +14,11 @@ import WatchedStatus from "@/app/components/WatchedStatus";
 export default function Sidebar() {
   const { id, videoId } = useParams();
   const { data: course } = useCourse(id as string);
+  const toggleWatchStatus = useToggleVideoWatchStatus();
+
+  const handleToggleWatchStatus = (videoId: string) => {
+    toggleWatchStatus.mutate({ videoId });
+  };
 
   return (
     <aside className={styles.sidebar}>
@@ -61,7 +67,11 @@ export default function Sidebar() {
                       <BsClock className={courseMetaStyles.icon} />
                       {formatDurationToHoursMinutes(video.duration)}
                     </p>
-                    <button className={styles.watchedStatusButton}>
+                    <button
+                      className={styles.watchedStatusButton}
+                      onClick={() => handleToggleWatchStatus(video.id)}
+                      disabled={toggleWatchStatus.isPending}
+                    >
                       <WatchedStatus isWatched={video.isWatched} />
                     </button>
                   </div>
