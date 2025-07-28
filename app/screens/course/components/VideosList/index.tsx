@@ -4,6 +4,7 @@ import clsx from "clsx";
 import { Fragment } from "react";
 import styles from "./videosList.module.scss";
 import { formatDurationToHoursMinutes } from "@/app/utils/common.utils";
+import Link from "next/link";
 
 export default function VideosList({ className }: { className?: string }) {
     const course = useCourseFromCache();
@@ -20,7 +21,7 @@ export default function VideosList({ className }: { className?: string }) {
                         )}
                         <div className={styles.videoList}>
                             {chapter.videos.map((video) => (
-                                <div key={video.id} className={styles.videoItem}>
+                                <Link href={`/watch/${course.id}/${video.id}`} key={video.id} className={styles.videoItem}>
                                     <img
                                         src={video.thumbnail}
                                         alt={video.title}
@@ -40,7 +41,7 @@ export default function VideosList({ className }: { className?: string }) {
                                             )}
                                         </div>
                                     </div>
-                                </div>
+                                </Link>
                             ))}
                         </div>
                     </Fragment>

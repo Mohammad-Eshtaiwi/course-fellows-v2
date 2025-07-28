@@ -34,9 +34,6 @@ export async function getUserCourse(id: string) {
           return {
             ...chapter,
             state,
-            videos: chapter.videos.map((video) => ({
-              ...video,
-            })),
           };
         }),
       };
@@ -60,7 +57,7 @@ export async function getUserCourse(id: string) {
 
   const progress = videoCount > 0 ? Math.floor((watchedCount / videoCount) * 100) : 0;
 
-  return { ...course, duration, videoCount, progress };
+  return { ...course, duration, videoCount, progress, watchedCount };
 }
 
 function getChapterState(chapter: CourseChapterWithVideos) {

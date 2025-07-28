@@ -23,6 +23,7 @@ export function useCourse(id: string) {
 
 export function useCourseFromCache() {
   const { id } = useParams<{ id: string }>();
+
   const queryClient = useQueryClient();
   const course = queryClient.getQueryData<Course>(getCourseQueryKey(id))!;
   return course;
