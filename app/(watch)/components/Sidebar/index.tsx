@@ -50,11 +50,16 @@ export default function Sidebar() {
             {/* TODO: Add chapter title here */}
             {/* <Link href={`/watch/${id}/${chapter.id}`} key={chapter.id}>{chapter.title}</Link> */}
             <div className={styles.videos}>
-              {chapter.videos.map((video) => (
-                <div className={styles.video} key={video.id}>
+              {chapter.videos.map((video, idx) => (
+                <div
+                  className={clsx(styles.video, {
+                    "border-dividor-bottom": idx !== chapter.videos.length - 1,
+                  })}
+                  key={video.id}
+                >
                   <Link
                     href={`/watch/${id}/${video.id}`}
-                    className={clsx(styles.videoTitle, "heading-m", {
+                    className={clsx(styles.videoTitle, {
                       [styles.activeVideo]: video.id === videoId,
                     })}
                   >
