@@ -1,0 +1,31 @@
+.organizeScreen {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding-bottom: 1rem;
+}
+
+.chapter {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.video {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 1rem;
+  background-color: var(--color-primary);
+  color: var(--color-white-100);
+  padding: 1rem;
+  border-radius: 0.5rem;
+  border: 1px solid var(--color-primary);
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: var(--color-primary-light);
+  }
+}

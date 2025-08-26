@@ -1,41 +1,32 @@
-import { useForm, Controller } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Dialog from "@/app/components/Dialog";
 import Input from "@/app/components/Input";
 import Button from "@/app/components/Button";
 import Alert from "@/app/components/Alert";
-import RadioGroup, { RadioOption } from "@/app/components/RadioGroup";
 import { useAddCourse } from "@/app/hooks/courses/courses.client";
 import { addCourseSchema, AddCourseSchema } from "./schema";
 import styles from "./addCourseDialog.module.scss";
-import { PLAYLIST_ID_REQUIRED, VIDEO_ID_REQUIRED } from "@/app/api/user-courses/add/add.constants";
+import {
+  PLAYLIST_ID_REQUIRED,
+  VIDEO_ID_REQUIRED,
+} from "@/app/api/user-courses/add/add.constants";
 
 interface AddCourseDialogProps {
   isOpen: boolean;
   onClose: () => void;
 }
 
-const courseTypeOptions: RadioOption[] = [
-  {
-    label: "YouTube Playlist",
-    value: "playlist",
-    description: "Import an entire playlist of videos as a course",
-  },
-  {
-    label: "YouTube Video",
-    value: "video",
-    description: "Import a single video as a course",
-  },
-];
-
-export default function AddCourseDialog({ isOpen, onClose }: AddCourseDialogProps) {
+export default function AddCourseDialog({
+  isOpen,
+  onClose,
+}: AddCourseDialogProps) {
   const {
     register,
     handleSubmit,
     formState: { errors },
     reset,
     watch,
-    control,
   } = useForm<AddCourseSchema>({
     defaultValues: {
       type: "playlist",
@@ -59,7 +50,9 @@ export default function AddCourseDialog({ isOpen, onClose }: AddCourseDialogProp
     );
   }
 
-  const errorMessage = getAddCourseErrorMessage(addCourseMutation.error?.message);
+  const errorMessage = getAddCourseErrorMessage(
+    addCourseMutation.error?.message
+  );
 
   function handleClose() {
     if (!addCourseMutation.isPending) {
@@ -75,7 +68,11 @@ export default function AddCourseDialog({ isOpen, onClose }: AddCourseDialogProp
       title="Add New Course"
       maxWidth="md"
     >
-      <form onSubmit={handleSubmit(onSubmit)} noValidate className={styles.form}>
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        noValidate
+        className={styles.form}
+      >
         {addCourseMutation.isError && (
           <Alert
             variant="danger"
@@ -84,22 +81,6 @@ export default function AddCourseDialog({ isOpen, onClose }: AddCourseDialogProp
             dismissible={false}
           />
         )}
-        <div className={styles.formGroup}>
-          <Controller
-            name="type"
-            control={control}
-            render={({ field }) => (
-              <RadioGroup
-                label="Course Type"
-                options={courseTypeOptions}
-                value={field.value}
-                onChange={field.onChange}
-                error={errors.type?.message}
-                disabled={addCourseMutation.isPending}
-              />
-            )}
-          />
-        </div>
 
         <div className={styles.formGroup}>
           <Input
@@ -133,10 +114,7 @@ export default function AddCourseDialog({ isOpen, onClose }: AddCourseDialogProp
           >
             Cancel
           </Button>
-          <Button
-            type="submit"
-            disabled={addCourseMutation.isPending}
-          >
+          <Button type="submit" disabled={addCourseMutation.isPending}>
             {addCourseMutation.isPending ? "Adding..." : "Add Course"}
           </Button>
         </div>

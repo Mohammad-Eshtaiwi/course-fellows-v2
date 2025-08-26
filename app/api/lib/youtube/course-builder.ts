@@ -33,19 +33,21 @@ export class CourseBuilder {
         type: CourseType.playlist,
         userId: this.userId,
       },
-      videos: playlistItems.filter((item) => item.videoInfo).map((item, order) => {
-        const duration = item.videoInfo.contentDetails?.duration!
-          ? toSeconds(parse(item.videoInfo.contentDetails?.duration))
-          : 0;
-        return {
-          title: item.snippet?.title || "Untitled Video",
-          url: `https://www.youtube.com/watch?v=${item.contentDetails?.videoId}`,
-          duration,
-          order: order + 1,
-          chapterId: null,
-          thumbnail: item.snippet?.thumbnails?.high?.url || "",
-        };
-      }),
+      videos: playlistItems
+        .filter((item) => item.videoInfo)
+        .map((item, order) => {
+          const duration = item.videoInfo.contentDetails?.duration!
+            ? toSeconds(parse(item.videoInfo.contentDetails?.duration))
+            : 0;
+          return {
+            title: item.snippet?.title || "Untitled Video",
+            url: `https://www.youtube.com/watch?v=${item.contentDetails?.videoId}`,
+            duration,
+            order: order + 1,
+            chapterId: null,
+            thumbnail: item.snippet?.thumbnails?.high?.url || "",
+          };
+        }),
     };
   }
 
@@ -58,8 +60,7 @@ export class CourseBuilder {
 
     const courseThumbnailUrl = video.snippet?.thumbnails?.high?.url || "";
     const description = video.snippet?.description || "";
-    const videoDuration =
-      toSeconds(parse(video.contentDetails?.duration!));
+    const videoDuration = toSeconds(parse(video.contentDetails?.duration!));
 
     const chapters = chaptersExtractor(description, videoDuration);
 
@@ -75,7 +76,7 @@ export class CourseBuilder {
       },
       videos: chapters.map((chapter, order) => ({
         title: chapter.title,
-        url: `https://www.youtube.com/watch?v=${videoId}&t=${chapter.timestamp}`,
+        url: `https://www.youtube.com/watch?v=${videoId}&start=${chapter.timestamp}`,
         duration: chapter.duration,
         order: order + 1,
         chapterId: null,

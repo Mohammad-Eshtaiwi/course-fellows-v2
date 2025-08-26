@@ -24,8 +24,7 @@ function CourseCard({ course, onDelete }: CourseCardProps) {
     onDelete(course);
   };
 
-  const courseMetaStyle = clsx("border-dividor", styles.courseMeta)
-
+  const courseMetaStyle = clsx("border-dividor", styles.courseMeta);
 
   return (
     <article className={`${styles.courseCard} shadow-primary-light`}>
@@ -52,14 +51,17 @@ function CourseCard({ course, onDelete }: CourseCardProps) {
           <button className={styles.nextVideoButton}>
             <FaPlay />
           </button>
-          <div className={styles.nextVideoInfo}>
+          <Link
+            href={`/watch/${course.id}/${course.nextVideo.id}`}
+            className={styles.nextVideoInfo}
+          >
             <p className={`${styles.nextVideoTitle} heading-m truncate`}>
               {course.nextVideo.title}
             </p>
             <p className={`body-s ${styles.nextVideoDuration}`}>
               {formatDurationToHoursMinutes(course.nextVideo.duration)}
             </p>
-          </div>
+          </Link>
         </div>
         <div className={courseMetaStyle}>
           <p className={`${styles.courseCardDuration} body-s`}>
