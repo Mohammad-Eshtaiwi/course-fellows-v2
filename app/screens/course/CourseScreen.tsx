@@ -23,7 +23,7 @@ export default function CourseScreen() {
 
   return (
     <Container className={clsx(styles.courseScreen)}>
-      <CourseSideBar className={styles.courseSideBar} />
+      <CourseSideBar />
       <VideosList className={styles.videoList} />
     </Container>
   );

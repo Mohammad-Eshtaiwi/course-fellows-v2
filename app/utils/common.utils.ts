@@ -1,4 +1,4 @@
-import { intervalToDuration, formatDuration } from "date-fns";
+import { formatDuration } from "date-fns";
 
 export function formatDurationToHoursMinutes(durationInSeconds: number) {
   const totalHours = Math.floor(durationInSeconds / 3600);

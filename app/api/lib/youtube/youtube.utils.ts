@@ -15,7 +15,10 @@ const calculateChapterDuration = (
     : videoDuration - currentChapter.totalSeconds;
 };
 
-export const chaptersExtractor = (description: string, videoDuration: number) => {
+export const chaptersExtractor = (
+  description: string,
+  videoDuration: number
+) => {
   // Regular expression to match timestamps in format HH:MM:SS or MM:SS followed by chapter title
   // Example matches:
   // "0:00 Introduction"
@@ -40,7 +43,7 @@ export const chaptersExtractor = (description: string, videoDuration: number) =>
   let match;
 
   while ((match = timestampRegex.exec(description)) !== null) {
-    const [_, hours, minutes, seconds, title] = match;
+    const [, hours, minutes, seconds, title] = match;
 
     // Convert to seconds for total passed time
     const totalSeconds =

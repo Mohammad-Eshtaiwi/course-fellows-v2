@@ -37,14 +37,14 @@ export async function getPlaylistInfo(
       const data: youtube_v3.Schema$PlaylistItemListResponse = await res.json();
 
       // get video info
-      const videoIds = data.items?.map((item) => item.contentDetails?.videoId!);
+      const videoIds = data.items?.map((item) => item.contentDetails!.videoId!);
       const videoInfos = await Promise.all(
         videoIds?.map((videoId) => getVideoInfo(videoId)) || []
       );
 
       const itemsWithVideoInfo = data.items?.map((item, index) => ({
         ...item,
-        videoInfo: videoInfos[index]?.data!,
+        videoInfo: videoInfos[index]!.data!,
       }));
 
       if (itemsWithVideoInfo) {

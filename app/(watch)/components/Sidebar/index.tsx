@@ -37,7 +37,7 @@ export default function Sidebar() {
       >
         <p className={`${courseMetaStyles.courseCardDuration} body-s`}>
           <BsClock className={courseMetaStyles.icon} />
-          {formatDurationToHoursMinutes(course?.duration!)}
+          {formatDurationToHoursMinutes(course?.duration ?? 0)}
         </p>
         <p className={`${courseMetaStyles.totalVideos} body-s`}>
           <MdOndemandVideo className={courseMetaStyles.icon} />
@@ -48,7 +48,9 @@ export default function Sidebar() {
         {course?.chapters.map((chapter) => (
           <Fragment key={chapter.id}>
             {/* TODO: Add chapter title here */}
-            {/* <Link href={`/watch/${id}/${chapter.id}`} key={chapter.id}>{chapter.title}</Link> */}
+            <h2 key={chapter.id} className={styles.chapterTitle}>
+              {chapter.title}
+            </h2>
             <div className={styles.videos}>
               {chapter.videos.map((video, idx) => (
                 <div

@@ -50,6 +50,18 @@
   margin-top: 0.75rem;
 }
 
+.chapterTitle {
+  margin-bottom: 0.5rem;
+  background-color: var(--color-primary);
+  border-radius: 0.5rem;
+  font-size: 1.125rem;
+  padding: 0.5rem 1rem;
+}
+
+.videos + .chapterTitle {
+  margin-top: 1rem;
+}
+
 .videoTitle {
   display: block;
   font-weight: 600;

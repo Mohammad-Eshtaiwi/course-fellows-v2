@@ -1,4 +1,4 @@
-import { auth } from "@/app/api/auth/[...nextauth]/route";
+import { auth } from "@/app/api/auth/[...nextauth]/auth";
 import {
   buildErrorResponse,
   buildSuccessResponse,
@@ -24,7 +24,7 @@ export async function PATCH(
   const body = await request.json();
   try {
     createChapterSchema.parse(body);
-  } catch (error) {
+  } catch {
     return buildErrorResponse(400, "Invalid request body");
   }
 
@@ -40,4 +40,3 @@ export async function PATCH(
 
   return buildSuccessResponse(chapter, 200);
 }
-

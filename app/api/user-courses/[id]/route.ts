@@ -1,4 +1,4 @@
-import { auth } from "@/app/api/auth/[...nextauth]/route";
+import { auth } from "@/app/api/auth/[...nextauth]/auth";
 import {
   buildErrorResponse,
   buildSuccessResponse,
@@ -54,7 +54,10 @@ export async function DELETE(
     }
 
     if (existingCourse.userId !== user.user.id) {
-      return buildErrorResponse(403, "You don't have permission to delete this course");
+      return buildErrorResponse(
+        403,
+        "You don't have permission to delete this course"
+      );
     }
 
     // Delete the course - cascade will handle videos and chapters
@@ -63,7 +66,9 @@ export async function DELETE(
     });
 
     return buildSuccessResponse(
-      { message: `Course "${existingCourse.title}" has been deleted successfully` },
+      {
+        message: `Course "${existingCourse.title}" has been deleted successfully`,
+      },
       200
     );
   } catch (error) {

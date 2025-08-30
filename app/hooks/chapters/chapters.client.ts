@@ -1,5 +1,10 @@
 import { CreateChapterSchema } from "@/app/api/chapters/[courseId]/schema";
+import { OrganizeChaptersSchema } from "@/app/api/chapters/[courseId]/organize/schema";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { Course, CourseChapter } from "@prisma/client";
+import { useRouter } from "next/navigation";
+
+type CourseWithChapters = Course & { chapters: CourseChapter[] };
 
 const CHAPTERS_ENDPOINT = "/api/chapters";
 
@@ -31,12 +36,15 @@ export function useUpdateChapterTitle() {
       await queryClient.cancelQueries({ queryKey: ["course", courseId] });
       const previousCourse = queryClient.getQueryData(["course", courseId]);
 
-      queryClient.setQueryData(["course", courseId], (old: any) => ({
-        ...old,
-        chapters: old.chapters.map((chapter: any) =>
-          chapter.id === chapterId ? { ...chapter, title } : chapter
-        ),
-      }));
+      queryClient.setQueryData(
+        ["course", courseId],
+        (old: CourseWithChapters) => ({
+          ...old,
+          chapters: old.chapters.map((chapter: CourseChapter) =>
+            chapter.id === chapterId ? { ...chapter, title } : chapter
+          ),
+        })
+      );
 
       return { previousCourse, courseId };
     },
@@ -74,5 +82,38 @@ export function useCreateChapter(onSuccess: () => void) {
       return response.json();
     },
     onSuccess,
+  });
+}
+
+export function useOrganizeChapters() {
+  const router = useRouter();
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async ({
+      courseId,
+      chapters,
+    }: {
+      courseId: string;
+      chapters: OrganizeChaptersSchema;
+    }) => {
+      const response = await fetch(
+        `${CHAPTERS_ENDPOINT}/${courseId}/organize`,
+        {
+          method: "POST",
+          body: JSON.stringify(chapters),
+        }
+      );
+      if (!response.ok) {
+        throw new Error("Failed to organize chapters");
+      }
+      return response.json();
+    },
+    onSuccess: (_, { courseId }) => {
+      // go to  course page
+      router.push(`/courses/${courseId}`);
+    },
+    onSettled: (_, __, { courseId }) => {
+      queryClient.invalidateQueries({ queryKey: ["course", courseId] });
+    },
   });
 }

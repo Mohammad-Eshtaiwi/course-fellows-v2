@@ -11,7 +11,11 @@ interface DeleteCourseDialogProps {
   course: Course | null;
 }
 
-export default function DeleteCourseDialog({ isOpen, onClose, course }: DeleteCourseDialogProps) {
+export default function DeleteCourseDialog({
+  isOpen,
+  onClose,
+  course,
+}: DeleteCourseDialogProps) {
   const deleteCourseMutation = useDeleteCourse();
 
   function handleDelete() {
@@ -45,19 +49,22 @@ export default function DeleteCourseDialog({ isOpen, onClose, course }: DeleteCo
         {deleteCourseMutation.isError && (
           <Alert
             variant="danger"
-            message={deleteCourseMutation.error?.message || "Failed to delete course"}
+            message={
+              deleteCourseMutation.error?.message || "Failed to delete course"
+            }
             isVisible={true}
             dismissible={false}
           />
         )}
-        
+
         <div className={styles.warning}>
           <IoWarningOutline className={styles.warningIcon} />
           <div className={styles.warningContent}>
             <h3 className={styles.warningTitle}>Are you sure?</h3>
             <p className={styles.warningMessage}>
-              This will permanently delete <strong>"{course.title}"</strong>. 
-              This action cannot be undone.
+              This will permanently delete{" "}
+              <strong>&quot;{course.title}&quot;</strong>. This action cannot be
+              undone.
             </p>
           </div>
         </div>

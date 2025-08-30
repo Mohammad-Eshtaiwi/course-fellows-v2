@@ -36,8 +36,8 @@ export class CourseBuilder {
       videos: playlistItems
         .filter((item) => item.videoInfo)
         .map((item, order) => {
-          const duration = item.videoInfo.contentDetails?.duration!
-            ? toSeconds(parse(item.videoInfo.contentDetails?.duration))
+          const duration = item.videoInfo.contentDetails!.duration!
+            ? toSeconds(parse(item.videoInfo.contentDetails!.duration))
             : 0;
           return {
             title: item.snippet?.title || "Untitled Video",
@@ -60,7 +60,7 @@ export class CourseBuilder {
 
     const courseThumbnailUrl = video.snippet?.thumbnails?.high?.url || "";
     const description = video.snippet?.description || "";
-    const videoDuration = toSeconds(parse(video.contentDetails?.duration!));
+    const videoDuration = toSeconds(parse(video.contentDetails!.duration!));
 
     const chapters = chaptersExtractor(description, videoDuration);
 
@@ -69,7 +69,7 @@ export class CourseBuilder {
     }
     return {
       course: {
-        title: video.snippet?.title!,
+        title: video.snippet!.title!,
         thumbnail: courseThumbnailUrl,
         type: CourseType.video,
         userId: this.userId,

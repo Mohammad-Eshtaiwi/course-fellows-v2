@@ -2,7 +2,7 @@ import {
   buildErrorResponse,
   buildSuccessResponse,
 } from "@/app/api/utils/responseBuilder";
-import { auth } from "@/app/api/auth/[...nextauth]/route";
+import { auth } from "@/app/api/auth/[...nextauth]/auth";
 import { getUserCourses } from "./getUserCourses";
 
 export async function GET() {

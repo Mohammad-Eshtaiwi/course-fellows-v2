@@ -1,5 +1,5 @@
 import { NextRequest } from "next/server";
-import { auth } from "../../auth/[...nextauth]/route";
+import { auth } from "@/app/api/auth/[...nextauth]/auth";
 import {
   buildErrorResponse,
   buildSuccessResponse,
@@ -27,6 +27,7 @@ export async function POST(
   try {
     createChapterSchema.parse(body);
   } catch (error) {
+    console.log(error);
     return buildErrorResponse(400, "Invalid request body");
   }
 

@@ -50,6 +50,7 @@ model CourseVideo {
   chapter   CourseChapter? @relation(fields: [chapterId], references: [id], onDelete: Cascade)
 }
 
+
 model CourseChapter {
   id       String        @id @default(cuid())
   title    String

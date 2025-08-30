@@ -1,15 +1,9 @@
-import React from 'react';
-import { Transition } from '@headlessui/react';
-import {
-  IoCheckmarkCircle,
-  IoWarning,
-  IoInformationCircle,
-  IoCloseCircle,
-  IoClose
-} from 'react-icons/io5';
-import styles from './alert.module.scss';
+import { Transition } from "@headlessui/react";
+import React from "react";
+import { IoClose } from "react-icons/io5";
+import styles from "./alert.module.scss";
 
-export type AlertVariant = 'success' | 'danger' | 'warning' | 'info';
+export type AlertVariant = "success" | "danger" | "warning" | "info";
 
 export interface AlertProps {
   variant: AlertVariant;
@@ -29,10 +23,8 @@ const Alert: React.FC<AlertProps> = ({
   isVisible,
   onClose,
   dismissible = false,
-  className = '',
-  noIcon = false,
+  className = "",
 }) => {
-
   return (
     <Transition
       show={isVisible}
@@ -43,7 +35,10 @@ const Alert: React.FC<AlertProps> = ({
       leaveFrom={styles.leaveFrom}
       leaveTo={styles.leaveTo}
     >
-      <div className={`${styles.alert} ${styles[variant]} ${className}`} role="alert">
+      <div
+        className={`${styles.alert} ${styles[variant]} ${className}`}
+        role="alert"
+      >
         <div className={styles.content}>
           <div className={styles.textContent}>
             {title && <div className={styles.title}>{title}</div>}
@@ -65,4 +60,4 @@ const Alert: React.FC<AlertProps> = ({
   );
 };
 
-export default Alert; 
+export default Alert;
