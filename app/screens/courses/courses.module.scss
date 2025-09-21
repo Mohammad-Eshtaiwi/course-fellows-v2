@@ -10,8 +10,6 @@
   }
 }
 
-
-
 .coursesGrid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -19,12 +17,9 @@
   align-items: start;
 }
 
-
-
 .coursesContainer {
   background-color: var(--color-dark-900);
   height: 100%;
-  padding: var(--spacing-md);
   border-radius: 8px;
   display: grid;
   grid-template-rows: auto 1fr;

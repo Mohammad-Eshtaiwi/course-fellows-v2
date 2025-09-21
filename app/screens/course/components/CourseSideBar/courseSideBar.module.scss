@@ -3,6 +3,11 @@
   background-color: var(--color-dark-800);
   height: fit-content;
   padding: 1rem;
+
+  @media screen and (max-width: 1024px) {
+    margin-bottom: 1.5rem;
+    
+  }
 }
 
 .thumbnail {

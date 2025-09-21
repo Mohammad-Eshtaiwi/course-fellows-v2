@@ -3,6 +3,12 @@
   display: grid;
   grid-template-columns: var(--course-sidebar-width) 1fr;
   gap: 1.5rem;
+
+  @media screen and (max-width: 1024px) {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem; 
+  }
 }
 
 

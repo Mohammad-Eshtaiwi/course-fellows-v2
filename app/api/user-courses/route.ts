@@ -7,12 +7,12 @@ import { getUserCourses } from "./getUserCourses";
 
 export async function GET() {
   try {
-    const user = await auth();
+    const { user } = (await auth()) || {};
     if (!user) {
       return buildErrorResponse(401, "Unauthorized");
     }
 
-    const courses = await getUserCourses(user.user);
+    const courses = await getUserCourses(user);
 
     return buildSuccessResponse(courses);
   } catch (error) {

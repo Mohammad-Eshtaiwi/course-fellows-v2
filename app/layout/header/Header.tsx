@@ -9,7 +9,7 @@ export default function Header() {
   const logoLinkClasses = clsx("heading-xl", styles.logoLink);
 
   return (
-    <header className={styles.header}>
+    <header className={styles.header} id="header">
       <Container>
         <Link className={logoLinkClasses} href="/">
           <Image src="/logo.png" alt="Logo" width={32} height={32} />
