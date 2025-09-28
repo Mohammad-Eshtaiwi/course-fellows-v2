@@ -11,6 +11,7 @@ import { formatDurationToHoursMinutes } from "@/app/utils/common.utils";
 import { BsCaretDownFill, BsCaretUpFill, BsClock } from "react-icons/bs";
 import { MdOndemandVideo } from "react-icons/md";
 import WatchedStatus from "@/app/components/WatchedStatus";
+import { COURSE_DEFAULT_NAME } from "@/app/constants/constants";
 export default function Sidebar() {
   const { id, videoId } = useParams();
   const { data: course } = useCourse(id as string);
@@ -65,10 +66,11 @@ export default function Sidebar() {
         <div className={styles.sidebarContent}>
           {course?.chapters.map((chapter) => (
             <Fragment key={chapter.id}>
-              {/* TODO: Add chapter title here */}
-              <h2 key={chapter.id} className={styles.chapterTitle}>
-                {chapter.title}
-              </h2>
+              {chapter.title !== COURSE_DEFAULT_NAME && (
+                <h2 key={chapter.id} className={styles.chapterTitle}>
+                  {chapter.title}
+                </h2>
+              )}
               <div className={styles.videos}>
                 {chapter.videos.map((video, idx) => (
                   <div
