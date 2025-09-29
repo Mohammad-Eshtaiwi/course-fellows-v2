@@ -1,0 +1,31 @@
+.footer {
+    width: 100%;
+    padding: 1rem 0;
+    background-color: var(--background-secondary);
+    border-top: 1px solid var(--border-color);
+    margin-top: auto;
+  }
+  
+  .content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .links {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    
+    a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }

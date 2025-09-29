@@ -7,7 +7,7 @@ export async function middleware(request: NextRequest) {
     const token = await getToken({ req: request });
     const isHomePage = request.nextUrl.pathname === "/";
     const isApiRoute = request.nextUrl.pathname.startsWith("/api");
-
+    const isPrivacyPage = request.nextUrl.pathname === "/privacy";
     // Allow API routes to handle their own authentication
     if (isApiRoute) {
       return NextResponse.next();
@@ -19,7 +19,7 @@ export async function middleware(request: NextRequest) {
     }
 
     // If user is not authenticated and tries to access protected routes, redirect to home
-    if (!token && !isHomePage) {
+    if (!token && !isHomePage && !isPrivacyPage) {
       return NextResponse.redirect(new URL("/", request.url));
     }
 
