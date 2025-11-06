@@ -1,5 +1,16 @@
 import Link from "next/link";
 import styles from "./privacy.module.scss";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Privacy Policy",
+  description:
+    "Privacy Policy for Course Fellows. Learn how we collect, use, and protect your personal information when you use our learning platform.",
+  robots: {
+    index: true,
+    follow: true,
+  },
+};
 
 export default function PrivacyPolicy() {
   return (
