@@ -3,9 +3,12 @@ import { YOUTUBE_API_BASE } from "./youtube.constants";
 
 type PlaylistInfoResult = {
   data:
-    | (youtube_v3.Schema$PlaylistItem & {
-        videoInfo: youtube_v3.Schema$Video;
-      })[]
+    | {
+        videos: (youtube_v3.Schema$PlaylistItem & {
+          videoInfo: youtube_v3.Schema$Video;
+        })[];
+        playlistTitle: string;
+      }
     | undefined;
   error: boolean;
 };
@@ -22,6 +25,20 @@ export async function getPlaylistInfo(
     throw new Error("YOUTUBE_API_KEY is not set");
   }
 
+  let playlist: youtube_v3.Schema$PlaylistListResponse;
+  try {
+    const url = new URL(YOUTUBE_API_BASE + "/playlists");
+    url.searchParams.append("part", "snippet,contentDetails");
+    url.searchParams.append("id", playlistId);
+    url.searchParams.append("key", process.env.YOUTUBE_API_KEY!);
+    const res = await fetch(url.toString());
+    playlist = (await res.json()) as youtube_v3.Schema$PlaylistListResponse;
+  } catch (err) {
+    console.error("Error fetching playlist:", err);
+    return { data: undefined, error: true };
+  }
+
+  // get playlist videos
   try {
     do {
       const url = new URL(YOUTUBE_API_BASE + "/playlistItems");
@@ -53,7 +70,15 @@ export async function getPlaylistInfo(
 
       nextPageToken = data.nextPageToken || undefined;
     } while (nextPageToken);
-    return { data: allItems, error: false };
+    console.log(playlist.items?.[0].snippet?.title, "this is the playlist");
+
+    return {
+      data: {
+        videos: allItems,
+        playlistTitle: playlist.items?.[0].snippet!.title || "",
+      },
+      error: false,
+    };
   } catch (err) {
     console.error("Error fetching playlist info:", err);
     return { data: undefined, error: true };
@@ -65,9 +90,7 @@ type VideoInfoResult = {
   error: boolean;
 };
 
-export async function getVideoInfo(
-  videoId: string,
-): Promise<VideoInfoResult> {
+export async function getVideoInfo(videoId: string): Promise<VideoInfoResult> {
   if (!process.env.YOUTUBE_API_KEY) {
     throw new Error("YOUTUBE_API_KEY is not set");
   }

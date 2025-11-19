@@ -1,5 +1,11 @@
 import { forwardRef } from "react";
-import { RadioGroup as HeadlessRadioGroup, Radio, Field, Label, Description } from "@headlessui/react";
+import {
+  RadioGroup as HeadlessRadioGroup,
+  Radio,
+  Field,
+  Label,
+  Description,
+} from "@headlessui/react";
 import styles from "./radioGroup.module.scss";
 
 export interface RadioOption {
@@ -44,12 +50,8 @@ const RadioGroup = forwardRef<HTMLDivElement, RadioGroupProps>(
           disabled={disabled}
           aria-label={label}
         >
-          {label && (
-            <Label className={styles.groupLabel}>
-              {label}
-            </Label>
-          )}
-          
+          {label && <Label className={styles.groupLabel}>{label}</Label>}
+
           {description && !error && (
             <Description className={styles.groupDescription}>
               {description}
@@ -58,25 +60,22 @@ const RadioGroup = forwardRef<HTMLDivElement, RadioGroupProps>(
 
           <div className={styles.optionsContainer}>
             {options.map((option) => (
-              <Field key={option.value} className={styles.fieldWrapper}>
-                <div className={styles.option}>
-                  <Radio
-                    value={option.value}
-                    className={styles.radioButton}
-                  >
-                    <span className={styles.radioIndicator} />
-                  </Radio>
-                  <div className={styles.labelContent}>
-                    <Label className={styles.optionLabel}>
+              <Field key={option.value}>
+                <Label className={styles.optionLabel}>
+                  <div className={styles.option}>
+                    <Radio value={option.value} className={styles.radioButton}>
+                      <span className={styles.radioIndicator} />
+                    </Radio>
+                    <div className={styles.labelContent}>
                       {option.label}
-                    </Label>
-                    {option.description && (
-                      <Description className={styles.optionDescription}>
-                        {option.description}
-                      </Description>
-                    )}
+                      {option.description && (
+                        <Description className={styles.optionDescription}>
+                          {option.description}
+                        </Description>
+                      )}
+                    </div>
                   </div>
-                </div>
+                </Label>
               </Field>
             ))}
           </div>
@@ -90,4 +89,4 @@ const RadioGroup = forwardRef<HTMLDivElement, RadioGroupProps>(
 
 RadioGroup.displayName = "RadioGroup";
 
-export default RadioGroup; 
+export default RadioGroup;

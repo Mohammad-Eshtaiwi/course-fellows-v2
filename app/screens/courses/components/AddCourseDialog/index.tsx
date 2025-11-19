@@ -11,6 +11,7 @@ import {
   PLAYLIST_ID_REQUIRED,
   VIDEO_ID_REQUIRED,
 } from "@/app/api/user-courses/add/add.constants";
+import RadioGroup from "@/app/components/RadioGroup";
 
 interface AddCourseDialogProps {
   isOpen: boolean;
@@ -26,6 +27,7 @@ export default function AddCourseDialog({
     handleSubmit,
     formState: { errors },
     reset,
+    setValue,
     watch,
   } = useForm<AddCourseSchema>({
     defaultValues: {
@@ -81,7 +83,14 @@ export default function AddCourseDialog({
             dismissible={false}
           />
         )}
-
+        <RadioGroup
+          options={[
+            { label: "Playlist", value: "playlist" },
+            { label: "Video", value: "video" },
+          ]}
+          value={selectedType}
+          onChange={(value) => setValue("type", value as AddCourseSchema["type"])}
+        />
         <div className={styles.formGroup}>
           <Input
             id="course-url"

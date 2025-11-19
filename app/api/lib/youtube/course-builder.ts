@@ -2,6 +2,7 @@ import { Course, CourseVideo, CourseType } from "@prisma/client";
 import { getPlaylistInfo, getVideoInfo } from "./youtube.client";
 import { toSeconds, parse } from "iso8601-duration";
 import { chaptersExtractor } from "./youtube.utils";
+import { parseTimeToSeconds } from "@/app/utils/common.utils";
 
 type CourseBuilderResult = {
   course: Omit<Course, "id" | "createdAt" | "updatedAt">;
@@ -16,24 +17,29 @@ export class CourseBuilder {
   }
 
   async buildFromPlaylist(playlistId: string): Promise<CourseBuilderResult> {
-    const { data: playlistItems, error } = await getPlaylistInfo(playlistId);
-
-    if (error || !playlistItems || playlistItems.length === 0) {
+    const { data, error } = await getPlaylistInfo(playlistId);
+    const { playlistTitle, videos } = data || {};
+    if (
+      error ||
+      playlistTitle === undefined ||
+      videos === undefined ||
+      videos.length === 0
+    ) {
       throw new Error("Failed to fetch playlist information");
     }
 
     // Get the first video to use its thumbnail as the course thumbnail
-    const firstVideo = playlistItems[0];
+    const firstVideo = videos[0];
     const courseThumbnailUrl = firstVideo.snippet?.thumbnails?.high?.url || "";
 
     return {
       course: {
-        title: firstVideo.snippet?.title || "Untitled Playlist",
+        title: playlistTitle || "Untitled Playlist",
         thumbnail: courseThumbnailUrl,
         type: CourseType.playlist,
         userId: this.userId,
       },
-      videos: playlistItems
+      videos: videos
         .filter((item) => item.videoInfo)
         .map((item, order) => {
           const duration = item.videoInfo.contentDetails!.duration!
@@ -45,6 +51,7 @@ export class CourseBuilder {
             duration,
             order: order + 1,
             chapterId: null,
+            startAt: null,
             thumbnail: item.snippet?.thumbnails?.high?.url || "",
           };
         }),
@@ -67,6 +74,8 @@ export class CourseBuilder {
     if (chapters.length === 0) {
       throw new Error("No chapters found");
     }
+    console.log(chapters[0]);
+
     return {
       course: {
         title: video.snippet!.title!,
@@ -80,6 +89,7 @@ export class CourseBuilder {
         duration: chapter.duration,
         order: order + 1,
         chapterId: null,
+        startAt: parseTimeToSeconds(chapter.timestamp),
         thumbnail: video.snippet?.thumbnails?.high?.url || "",
       })),
     };

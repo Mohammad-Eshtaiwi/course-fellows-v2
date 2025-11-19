@@ -12,6 +12,7 @@ import { BsCaretDownFill, BsCaretUpFill, BsClock } from "react-icons/bs";
 import { MdOndemandVideo } from "react-icons/md";
 import WatchedStatus from "@/app/components/WatchedStatus";
 import { COURSE_DEFAULT_NAME } from "@/app/constants/constants";
+import { useYTPlayer } from "@/app/(watch)/hooks/ytPlayerContext";
 export default function Sidebar() {
   const { id, videoId } = useParams();
   const { data: course } = useCourse(id as string);
@@ -24,12 +25,18 @@ export default function Sidebar() {
   const handleToggleWatchStatus = (videoId: string) => {
     toggleWatchStatus.mutate({ videoId });
   };
-
+  const { playerRef } = useYTPlayer();
   useEffect(() => {
     const header = document.getElementById("header");
 
     setHeaderHeight(header!.clientHeight);
   }, []);
+
+  const handleSeekToChapter = (startAt: number | null) => {
+    if (playerRef?.current && startAt) {
+      playerRef.current.seekTo(startAt, true);
+    }
+  };
 
   return (
     <>
@@ -82,10 +89,14 @@ export default function Sidebar() {
                   >
                     <Link
                       href={`/watch/${id}/${video.id}`}
+                      shallow={true}
                       className={clsx(styles.videoTitle, {
                         [styles.activeVideo]: video.id === videoId,
                       })}
-                      onClick={() => setShowSidebar(false)}
+                      onClick={() => {
+                        handleSeekToChapter(video.startAt);
+                        setShowSidebar(false);
+                      }}
                     >
                       {video.title}
                     </Link>

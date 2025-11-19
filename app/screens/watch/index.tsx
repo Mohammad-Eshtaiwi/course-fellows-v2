@@ -1,10 +1,19 @@
 "use client";
-import YouTubePlayer from "@/app/components/YouTubePlayer";
+import { useYTPlayer } from "@/app/(watch)/hooks/ytPlayerContext";
+import YouTubePlayer from "@/app/components/YouTubePlayer/index";
 import { useCourse } from "@/app/hooks/course/course.client";
 import { useParams } from "next/navigation";
+import { useCallback } from "react";
 
 export default function WatchScreen() {
   const { id, videoId } = useParams();
+  const { playerRef } = useYTPlayer();
+  const handleGetPlayer = useCallback(
+    (player: YT.Player) => {
+      playerRef.current = player;
+    },
+    [playerRef]
+  );
   const { data: course } = useCourse(id as string);
   const chapter = course?.chapters.find((chapter) =>
     chapter.videos.find((video) => {
@@ -20,11 +29,17 @@ export default function WatchScreen() {
     return null;
   }
 
+  if (!video) {
+    return null;
+  }
   const { url } = urlWithNoStart(video.url);
-
   return (
     <div>
-      <YouTubePlayer src={url} />
+      <YouTubePlayer
+        src={url}
+        getPlayer={handleGetPlayer}
+        startAt={video.startAt}
+      />
     </div>
   );
 }

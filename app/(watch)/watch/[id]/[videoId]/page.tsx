@@ -1,10 +1,7 @@
 "use client";
-import WatchScreen from "@/app/screens/watch";
+export const dynamic = "force-dynamic";
 
 export default function WatchPage() {
-
-
-    return (
-        <WatchScreen />
-    );
+  // return <WatchScreen />;
+  return <></>;
 }
