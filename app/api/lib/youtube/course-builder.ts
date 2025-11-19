@@ -74,7 +74,6 @@ export class CourseBuilder {
     if (chapters.length === 0) {
       throw new Error("No chapters found");
     }
-    console.log(chapters[0]);
 
     return {
       course: {

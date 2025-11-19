@@ -70,7 +70,6 @@ export async function getPlaylistInfo(
 
       nextPageToken = data.nextPageToken || undefined;
     } while (nextPageToken);
-    console.log(playlist.items?.[0].snippet?.title, "this is the playlist");
 
     return {
       data: {

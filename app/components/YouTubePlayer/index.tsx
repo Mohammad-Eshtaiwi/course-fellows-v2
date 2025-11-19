@@ -31,7 +31,6 @@ function YouTubePlayer({ src, getPlayer, startAt }: YouTubePlayerProps) {
     } else {
       createPlayer();
     }
-    console.log("autoplay", startAt ? 0 : 1);
 
     function createPlayer() {
       if (containerRef.current && !playerRef.current) {
