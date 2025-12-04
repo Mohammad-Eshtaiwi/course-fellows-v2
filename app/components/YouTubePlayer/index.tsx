@@ -5,6 +5,7 @@ type YouTubePlayerProps = {
   src: string;
   getPlayer?: (player: YT.Player) => void;
   startAt?: number | null;
+  onReady?: (player: YT.Player) => void;
 };
 
 declare global {
@@ -13,7 +14,12 @@ declare global {
   }
 }
 
-function YouTubePlayer({ src, getPlayer, startAt }: YouTubePlayerProps) {
+function YouTubePlayer({
+  src,
+  getPlayer,
+  startAt,
+  onReady,
+}: YouTubePlayerProps) {
   const playerRef = useRef<YT.Player | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -42,6 +48,11 @@ function YouTubePlayer({ src, getPlayer, startAt }: YouTubePlayerProps) {
             autoplay: startAt ? undefined : 1,
             start: startAt || undefined,
             playsinline: 1,
+          },
+          events: {
+            onReady: (e) => {
+              onReady?.(e.target);
+            },
           },
         });
       }

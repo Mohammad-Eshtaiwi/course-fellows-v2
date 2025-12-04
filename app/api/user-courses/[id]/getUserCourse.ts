@@ -1,9 +1,11 @@
 import { prisma } from "@/lib/prisma";
-import { CourseChapter, CourseVideo } from "@prisma/client";
-
-type CourseChapterWithVideos = CourseChapter & {
-  videos: CourseVideo[];
-};
+import {
+  getChapterState,
+  getDuration,
+  getStartAtAccociatedWithVideoId,
+  getVideoCount,
+  getWatchedCount,
+} from "./factories";
 
 export async function getUserCourse(id: string) {
   const course = await prisma.course
@@ -16,7 +18,7 @@ export async function getUserCourse(id: string) {
           include: {
             videos: {
               orderBy: {
-                order: 'asc',
+                order: "asc",
               },
             },
           },
@@ -43,30 +45,21 @@ export async function getUserCourse(id: string) {
     return null;
   }
 
-  const duration = course?.chapters.reduce((acc, chapter) => {
-    return acc + chapter.videos.reduce((acc, video) => acc + video.duration, 0);
-  }, 0);
+  const duration = getDuration(course);
+  const videoCount = getVideoCount(course);
+  const watchedCount = getWatchedCount(course);
 
-  const videoCount = course?.chapters.reduce((acc, chapter) => {
-    return acc + chapter.videos.length;
-  }, 0);
+  const progress =
+    videoCount > 0 ? Math.floor((watchedCount / videoCount) * 100) : 0;
 
-  const watchedCount = course?.chapters.reduce((acc, chapter) => {
-    return acc + chapter.videos.reduce((acc, video) => acc + Number(video.isWatched), 0);
-  }, 0);
+  const startAtAccociatedWithVideoId = getStartAtAccociatedWithVideoId(course);
 
-  const progress = videoCount > 0 ? Math.floor((watchedCount / videoCount) * 100) : 0;
-
-  return { ...course, duration, videoCount, progress, watchedCount };
-}
-
-function getChapterState(chapter: CourseChapterWithVideos) {
-  let state: "completed" | "in-progress" | "not-started" = "not-started";
-  const watchedVideos = chapter.videos.filter((video) => video.isWatched);
-  if (watchedVideos.length === chapter.videos.length) {
-    state = "completed";
-  } else if (watchedVideos.length > 0) {
-    state = "in-progress";
-  }
-  return state;
+  return {
+    ...course,
+    duration,
+    videoCount,
+    progress,
+    watchedCount,
+    startAtAccociatedWithVideoId,
+  };
 }

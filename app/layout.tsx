@@ -69,31 +69,29 @@ export const metadata: Metadata = {
   },
 };
 
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: "Course Fellows",
+  description:
+    "Transform YouTube playlists into structured learning experiences",
+  url: process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000",
+  potentialAction: {
+    "@type": "SearchAction",
+    target: {
+      "@type": "EntryPoint",
+      urlTemplate: `${
+        process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"
+      }/courses?q={search_term_string}`,
+    },
+    "query-input": "required name=search_term_string",
+  },
+};
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "WebSite",
-    name: "Course Fellows",
-    description:
-      "Transform YouTube playlists into structured learning experiences",
-    url:
-      process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000",
-    potentialAction: {
-      "@type": "SearchAction",
-      target: {
-        "@type": "EntryPoint",
-        urlTemplate: `${
-          process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"
-        }/courses?q={search_term_string}`,
-      },
-      "query-input": "required name=search_term_string",
-    },
-  };
-
   return (
     <html lang="en">
       <head>
