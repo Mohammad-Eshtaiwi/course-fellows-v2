@@ -24,17 +24,21 @@ export const chaptersExtractor = (
   // "0:00 Introduction"
   // "1:30 Getting Started"
   // "1:05:45 Advanced Topics"
+  // "0:00Introduction" (no space)
+  // "- 00:00 Title" (with bullet/dash prefix)
+  // "• 02:30 Title" (with bullet point prefix)
   //
   // Regex breakdown:
   // (?:^|\n)                    - Start of line or newline
+  // [-•*]?\s*                   - Optional bullet character (-, •, *) followed by optional whitespace
   // (?:(?:(\d{1,2}):)?         - Optional hours (1-2 digits) followed by colon
   // (\d{1,2}):                  - Minutes (1-2 digits) followed by colon
   // (\d{2}))                    - Seconds (exactly 2 digits)
-  // \s+                         - One or more whitespace characters
+  // \s*                         - Zero or more whitespace characters (handles titles with or without space)
   // (.+?)                       - Chapter title (any characters, non-greedy)
-  // (?=\n(?:(?:\d{1,2}:)?\d{1,2}:\d{2}\s|[^0-9])|$)  - Look ahead for next timestamp, non-timestamp content, or end of string
+  // (?=\n[-•*]?\s*(?:(?:\d{1,2}:)?\d{1,2}:\d{2})|$)  - Look ahead for next timestamp line or end of string
   const timestampRegex =
-    /(?:^|\n)(?:(?:(\d{1,2}):)?(\d{1,2}):(\d{2}))\s+(.+?)(?=\n(?:(?:\d{1,2}:)?\d{1,2}:\d{2}\s|[^0-9])|$)/g;
+    /(?:^|\n)[-•*]?\s*(?:(?:(\d{1,2}):)?(\d{1,2}):(\d{2}))\s*(.+?)(?=\n[-•*]?\s*(?:(?:\d{1,2}:)?\d{1,2}:\d{2})|$)/g;
   const chapters: {
     timestamp: string;
     title: string;
@@ -59,7 +63,7 @@ export const chaptersExtractor = (
 
     chapters.push({
       timestamp: formattedTimestamp,
-      title: title.trim(),
+      title: title.trim().replace(/^[^\p{L}\p{N}]+/u, ""),
       totalSeconds,
     });
   }
